@@ -1,5 +1,7 @@
 package vista;
 
+import modelo.DadosAplicacao;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 
@@ -31,6 +33,7 @@ public class EcraPrincipal extends JFrame{
     }
 
     public static void main(String[] args) {
+        new DadosAplicacao();
         new EcraPrincipal("Gestao Eventos").setVisible(true);
     }
 }
