@@ -35,6 +35,30 @@ public class Evento {
         return pais;
     }
 
+    public void setListaProvas(ArrayList<Prova> listaProvas) {
+        this.listaProvas = listaProvas;
+    }
+
+    public void setNomeEvento(String nomeEvento) {
+        this.nomeEvento = nomeEvento;
+    }
+
+    public void setDataInicio(Data dataInicio) {
+        this.dataInicio = dataInicio;
+    }
+
+    public void setDataFim(Data dataFim) {
+        this.dataFim = dataFim;
+    }
+
+    public void setLocal(String local) {
+        this.local = local;
+    }
+
+    public void setPais(String pais) {
+        this.pais = pais;
+    }
+
     public String getNomeEvento() {
         return nomeEvento;
     }

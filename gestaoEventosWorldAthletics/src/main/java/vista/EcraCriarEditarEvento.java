@@ -21,8 +21,21 @@ public class EcraCriarEditarEvento extends JDialog {
     private JPanel painelCriarEditarEvento;
     private JButton guardarButton;
     private JButton cancelarButton;
+    private int posicaoEvento;
+
+    public EcraCriarEditarEvento(Evento evento){
+        this();
+        posicaoEvento = DadosAplicacao.INSTANCE.getListaEventos().indexOf(evento);
+        nomeEvento.setText(evento.getNomeEvento());
+        dataInicio.setText(evento.getDataInicio().toString());
+        dataFim.setText(evento.getDataFim().toString());
+        local.setText(evento.getLocal());
+        pais.setText(evento.getPais());
+    }
 
     public EcraCriarEditarEvento(){
+        posicaoEvento = -1;
+
         modelProvasDisponives = new DefaultListModel<String>();
         listaProvasDisponiveis.setModel(modelProvasDisponives);
 
@@ -34,9 +47,6 @@ public class EcraCriarEditarEvento extends JDialog {
             System.out.println(nomeProva);
             modelProvasDisponives.addElement(nomeProva);
         }
-
-        System.out.println("disponviel"+listaProvasEvento.getModel().getSize());
-        System.out.println("disponvie"+listaProvasDisponiveis.getModel().getSize());
 
         listaProvasDisponiveis.addListSelectionListener(new ListSelectionListener() {
             @Override
@@ -111,12 +121,22 @@ public class EcraCriarEditarEvento extends JDialog {
                                                     listaProvasDoEvento.add(new Prova(prova.getNome()));
                                                 }
                                             }
-
-                                            Evento evento = new Evento(listaProvasDoEvento, dataInicioVerificado, dataFimVerificado, local.getText(), pais.getText(), nomeEvento.getText());
-
-                                            DadosAplicacao.INSTANCE.addEvento(evento);
-
-                                            JOptionPane.showMessageDialog(this,"Foi criado o Evento");
+                                            //editar evento
+                                            if(posicaoEvento != -1){
+                                                Evento evento = DadosAplicacao.INSTANCE.getEvento(posicaoEvento);
+                                                evento.setNomeEvento(nomeEvento.getText());
+                                                evento.setDataInicio(dataInicioVerificado);
+                                                evento.setDataFim(dataFimVerificado);
+                                                evento.setLocal(local.getText());
+                                                evento.setPais(pais.getText());
+                                                evento.setListaProvas(listaProvasDoEvento);
+                                                JOptionPane.showMessageDialog(this,"Foi alterado o Evento");
+                                            }
+                                            else{ //criar evento
+                                                Evento evento = new Evento(listaProvasDoEvento, dataInicioVerificado, dataFimVerificado, local.getText(), pais.getText(), nomeEvento.getText());
+                                                DadosAplicacao.INSTANCE.addEvento(evento);
+                                                JOptionPane.showMessageDialog(this,"Foi criado o Evento");
+                                            }
 
                                             setVisible(false);
                                             this.getParent().setVisible(false);
