@@ -5,7 +5,7 @@ import java.util.Calendar;
 public class Data {
     private Calendar calendar;
 
-    private Data() {
+    public Data() {
 
     }
 
@@ -15,5 +15,10 @@ public class Data {
 
     public boolean isValida(){
         return true;
+    }
+
+    @Override
+    public String toString() {
+        return "dataPorFuncionar";
     }
 }

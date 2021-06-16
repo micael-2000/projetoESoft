@@ -10,11 +10,15 @@ public class DadosAplicacao {
     private ArrayList<Evento> listaEventos;
 
     public DadosAplicacao() {
+        //Provas pre definido
         listaProvasDadosPreDefinidos = new HashMap<>(30);
         listaProvasDadosPreDefinidos.put("Prova1", new ProvaDadosPreDefinidos("Prova1"));
         listaProvasDadosPreDefinidos.put("Prova2", new ProvaDadosPreDefinidos("Prova2"));
 
+        //Eventos
         listaEventos = new ArrayList<>();
+        listaEventos.add(new Evento(null, new Data(), new Data(), "Lisboa", "Portugal", "Evento teste"));
+        listaEventos.add(new Evento(null, new Data(), new Data(), "Marinha", "Antártida", "Evento teste 2"));
     }
 
     public boolean existsProva(){
@@ -25,8 +29,16 @@ public class DadosAplicacao {
         listaEventos.add(evento);
     }
 
+    public void removeEvento(int posicao){
+        listaEventos.remove(posicao);
+    }
+
     public ArrayList<Evento> getListaEventos() {
         return listaEventos;
+    }
+
+    public Evento getEvento(int index) {
+        return listaEventos.get(index);
     }
 
     public int getSizeEventos(){

@@ -6,6 +6,8 @@ import vista.EcraCriarEditarEvento;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -17,19 +19,16 @@ public class EcraEventos extends JFrame{
     private JButton criarEventoButton;
     private JButton voltarButton;
     private JTable tabelaEventos;
+    DefaultTableModel model;
 
     public EcraEventos(){
         criarEventoButton.addActionListener(this::btnCriarEventoActionPerformed);
 
-        Object[] columnNames = new Object[]{"Data", "Evento", "Cidade", "País", " dsf", " dsf", "X"};
-
-        DefaultTableModel model = new DefaultTableModel(null, columnNames);
-        tabelaEventos.setModel(model);
-
-        for (Evento evento: DadosAplicacao.INSTANCE.getListaEventos()) {
-            model.addRow(new Object[]{evento.getDataInicio() + "-" + evento.getDataFim(), evento.getNomeEvento(), evento.getLocal(), evento.getPais(), "Editar", "Exportar Dados", "X"});
-
-        }
+        atualizarTabela();
+        TableColumnModel tcm = tabelaEventos.getColumnModel();
+        tcm.getColumn(0).setPreferredWidth(200);
+        tcm.getColumn(1).setPreferredWidth(150);
+        tcm.getColumn(5).setPreferredWidth(100);
 
         //bloqueia o user de editar as celulas
         tabelaEventos.setDefaultEditor(Object.class, null);
@@ -40,6 +39,19 @@ public class EcraEventos extends JFrame{
                     JTable target = (JTable)e.getSource();
                     int row = target.getSelectedRow();
                     int column = target.getSelectedColumn();
+                    if(column == 4){
+                        new EcraCriarEditarEvento(DadosAplicacao.INSTANCE.getListaEventos().get(row));
+                    }
+                    else if(column == 6){
+                        int input = JOptionPane.showConfirmDialog(null, "Confirma a eliminação do evento: " + DadosAplicacao.INSTANCE.getEvento(row).getNomeEvento());
+
+                        //Eliminar evento
+                        if(input == 0){
+                            DadosAplicacao.INSTANCE.removeEvento(row);
+                            JOptionPane.showMessageDialog(null,"Foi eliminado o Evento");
+                            atualizarTabela();
+                        }
+                    }
                 }
             }
         });
@@ -62,6 +74,13 @@ public class EcraEventos extends JFrame{
     }
 
     private void atualizarTabela(){
+        Object columnNames[] = {"Data", "Evento", "Cidade", "País", "", "", ""};
 
+        model = new DefaultTableModel(null, columnNames);
+        tabelaEventos.setModel(model);
+
+        for (Evento evento: DadosAplicacao.INSTANCE.getListaEventos()) {
+            model.addRow(new Object[]{evento.getDataInicio() + "-" + evento.getDataFim(), evento.getNomeEvento(), evento.getLocal(), evento.getPais(), "Editar", "Exportar Dados", "Eliminar"});
+        }
     }
 }
