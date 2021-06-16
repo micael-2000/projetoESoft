@@ -1,4 +1,4 @@
-package vista;
+package vista.Evento;
 
 import modelo.*;
 
@@ -23,9 +23,10 @@ public class EcraCriarEditarEvento extends JDialog {
     private JButton cancelarButton;
     private int posicaoEvento;
 
-    public EcraCriarEditarEvento(Evento evento){
+    //E chamado este metodo quando for para editar
+    public EcraCriarEditarEvento(Evento evento, int posicaoEvento){
         this();
-        posicaoEvento = DadosAplicacao.INSTANCE.getListaEventos().indexOf(evento);
+        this.posicaoEvento = posicaoEvento;
         nomeEvento.setText(evento.getNomeEvento());
         dataInicio.setText(evento.getDataInicio().toString());
         dataFim.setText(evento.getDataFim().toString());
@@ -33,6 +34,7 @@ public class EcraCriarEditarEvento extends JDialog {
         pais.setText(evento.getPais());
     }
 
+    //E chamado na criacao do evento
     public EcraCriarEditarEvento(){
         posicaoEvento = -1;
 
@@ -118,7 +120,7 @@ public class EcraCriarEditarEvento extends JDialog {
                                             for (int i = 0; i < modelProvasEvento.getSize(); i++) {
                                                 ProvaDadosPreDefinidos prova = DadosAplicacao.INSTANCE.listaProvasDadosPreDefinidos.get(modelProvasEvento.getElementAt(i));
                                                 if(prova != null) {
-                                                    listaProvasDoEvento.add(new Prova(prova.getNome()));
+                                                    listaProvasDoEvento.add(new Prova(prova));
                                                 }
                                             }
                                             //editar evento

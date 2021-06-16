@@ -12,8 +12,8 @@ public class DadosAplicacao {
     public DadosAplicacao() {
         //Provas pre definido
         listaProvasDadosPreDefinidos = new HashMap<>(30);
-        listaProvasDadosPreDefinidos.put("Prova1", new ProvaDadosPreDefinidos("Prova1"));
-        listaProvasDadosPreDefinidos.put("Prova2", new ProvaDadosPreDefinidos("Prova2"));
+        listaProvasDadosPreDefinidos.put("Prova1", new ProvaDadosPreDefinidos("Prova1", "Corrida", "Pista exterior", "Eliminatórias", "Feminino", " "));
+        listaProvasDadosPreDefinidos.put("Prova2", new ProvaDadosPreDefinidos("Prova2", "Corrida", "Pista exterior", "Eliminatórias", "Feminino", " "));
 
         //Eventos
         listaEventos = new ArrayList<>();

@@ -1,6 +1,7 @@
 package vista;
 
 import modelo.DadosAplicacao;
+import vista.Evento.EcraEventos;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

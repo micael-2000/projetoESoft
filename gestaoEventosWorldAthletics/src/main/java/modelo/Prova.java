@@ -2,7 +2,10 @@ package modelo;
 
 public class Prova extends ProvaDadosPreDefinidos{
 
-    public Prova(String nome) {
-        super(nome);
+    public Prova(ProvaDadosPreDefinidos prova){
+        this(prova.getNome(), prova.getCategoria(), prova.getLocal(), prova.getTipoProva(), prova.getGenero(), prova.getNotas());
+    }
+    public Prova(String nome, String categoria, String local, String tipoProva, String genero, String notas) {
+        super(nome, categoria, local, tipoProva, genero, notas);
     }
 }
