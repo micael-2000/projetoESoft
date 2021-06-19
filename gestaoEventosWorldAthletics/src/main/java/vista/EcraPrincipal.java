@@ -2,6 +2,7 @@ package vista;
 
 import modelo.DadosAplicacao;
 import vista.Evento.EcraEventos;
+import vista.Prova.EcraProvas;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -19,6 +20,7 @@ public class EcraPrincipal extends JFrame{
 
         sairButton.addActionListener(this::btnSairActionPerformed);
         eventosButton.addActionListener(this::btnEventosActionPerformed);
+        provasButton.addActionListener(this::btnProvasActionPerformed);
 
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setContentPane(painelPrincipal);
@@ -31,6 +33,10 @@ public class EcraPrincipal extends JFrame{
 
     private void btnEventosActionPerformed(ActionEvent e) {
         new EcraEventos();
+    }
+
+    private void btnProvasActionPerformed(ActionEvent e) {
+        new EcraProvas();
     }
 
     public static void main(String[] args) {

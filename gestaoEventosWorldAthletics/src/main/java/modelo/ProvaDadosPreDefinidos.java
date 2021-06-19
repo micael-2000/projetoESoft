@@ -1,5 +1,7 @@
 package modelo;
 
+import java.util.ArrayList;
+
 public class ProvaDadosPreDefinidos {
     private static int id;
     private String nome;
@@ -8,6 +10,9 @@ public class ProvaDadosPreDefinidos {
     private String tipoProva;
     private String genero;
     private String notas;
+    private String recordesMundialAtual;
+    private String recordistas;
+    private String eventosEmQueDecorreu;
 
     public ProvaDadosPreDefinidos(String nome, String categoria, String local, String tipoProva, String genero, String notas) {
         this.nome = nome;
@@ -16,6 +21,9 @@ public class ProvaDadosPreDefinidos {
         this.tipoProva = tipoProva;
         this.genero = genero;
         this.notas = notas;
+        recordesMundialAtual = null;
+        recordistas = null;
+        eventosEmQueDecorreu = null;
     }
 
     public static int getId() {
@@ -68,6 +76,30 @@ public class ProvaDadosPreDefinidos {
 
     public void setNotas(String notas) {
         this.notas = notas;
+    }
+
+    public String getRecordesMundialAtual() {
+        return recordesMundialAtual;
+    }
+
+    public void setRecordesMundialAtual(String recordesMundialAtual) {
+        this.recordesMundialAtual = recordesMundialAtual;
+    }
+
+    public String getRecordistas() {
+        return recordistas;
+    }
+
+    public void setRecordistas(String recordistas) {
+        this.recordistas = recordistas;
+    }
+
+    public String getEventosEmQueDecorreu() {
+        return eventosEmQueDecorreu;
+    }
+
+    public void setEventosEmQueDecorreu(String eventosEmQueDecorreu) {
+        this.eventosEmQueDecorreu = eventosEmQueDecorreu;
     }
 
     @Override
