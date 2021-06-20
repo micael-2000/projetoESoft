@@ -49,6 +49,10 @@ public class DadosAplicacao {
         return listaEventos.size();
     }
 
+    public int getIndiceEvento(Evento evento){
+        return listaEventos.indexOf(evento);
+    }
+
     public Collection<ProvaDadosPreDefinidos> getListaProvasDadosPreDefinidos() {
         return listaProvasDadosPreDefinidos.values();
     }

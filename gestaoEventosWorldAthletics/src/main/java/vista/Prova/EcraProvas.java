@@ -1,10 +1,7 @@
 package vista.Prova;
 
 import com.opencsv.CSVWriter;
-import modelo.DadosAplicacao;
-import modelo.Data;
-import modelo.Evento;
-import modelo.ProvaDadosPreDefinidos;
+import modelo.*;
 import vista.Evento.EcraCriarEditarEvento;
 
 import javax.swing.*;
@@ -111,7 +108,7 @@ public class EcraProvas extends JFrame{
                     }
                     else{
                         //String nome, String categoria, String local, String tipoProva, String genero, String notas
-                        ProvaDadosPreDefinidos prova = new ProvaDadosPreDefinidos(tempArr[0], tempArr[1], tempArr[2], tempArr[3], tempArr[4], tempArr[5]);
+                        ProvaDadosPreDefinidos prova = new ProvaDadosPreDefinidos(tempArr[0], tempArr[1], tempArr[2], tempArr[3], Genero.valueOf(tempArr[4]), tempArr[5]);
                         DadosAplicacao.INSTANCE.addProva(prova);
                     }
                 }
@@ -141,7 +138,7 @@ public class EcraProvas extends JFrame{
 
                 for (ProvaDadosPreDefinidos prova : DadosAplicacao.INSTANCE.getListaProvasDadosPreDefinidos()) {
                     //String nome, String categoria, String local, String tipoProva, String genero, String notas
-                    String[] data = {prova.getNome(), prova.getCategoria(), prova.getLocal(), prova.getTipoProva(), prova.getGenero(), prova.getNotas()};
+                    String[] data = {prova.getNome(), prova.getCategoria(), prova.getLocal(), prova.getTipoProva(), prova.getGenero().toString(), prova.getNotas()};
                     writer.writeNext(data);
                 }
                 writer.close();

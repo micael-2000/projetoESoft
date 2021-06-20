@@ -47,9 +47,17 @@ public class EcraEventos extends JFrame{
                     int row = target.getSelectedRow();
                     int column = target.getSelectedColumn();
 
+                    //consultar evento
+                    if(column == 1){
+                        new EcraProgramaEvento();
+                    }
                     //Editar evento
                     if(column == 4){
-                        new EcraCriarEditarEvento(DadosAplicacao.INSTANCE.getListaEventos().get(row), row);
+                        new EcraCriarEditarEvento(DadosAplicacao.INSTANCE.getListaEventos().get(row));
+                    }
+                    //Exportar evento
+                    else if(column == 5){
+                        btnExportarEventoActionPerformed(row);
                     }
                     //Eliminar evento
                     else if(column == 6){
@@ -60,9 +68,6 @@ public class EcraEventos extends JFrame{
                             JOptionPane.showMessageDialog(null,"Foi eliminado o Evento");
                             atualizarTabela();
                         }
-                        //Exportar evento
-                    } else if(column == 5){
-                        btnExportarEventoActionPerformed(row);
                     }
                 }
             }
@@ -86,14 +91,8 @@ public class EcraEventos extends JFrame{
     }
 
     private void btnCriarEventoActionPerformed(ActionEvent e) {
-        /*
-        if (existsProva() == false)
-        {
-            mostrar erro
-        }
-        else{
-        */
-            new EcraCriarEditarEvento();
+        new EcraCriarEditarEvento();
+        setVisible(false);
     }
 
     private void btnImportarEventoActionPerformed(ActionEvent e) {
@@ -135,7 +134,7 @@ public class EcraEventos extends JFrame{
                             //tempArr[4] - pais
                             Evento evento = new Evento(null, dataInicio, dataFim, tempArr[2], tempArr[3], tempArr[4]);
                             DadosAplicacao.INSTANCE.addEvento(evento);
-                            new EcraCriarEditarEvento(evento, DadosAplicacao.INSTANCE.getListaEventos().indexOf(evento));
+                            new EcraCriarEditarEvento(evento);
                         }
                     }
                 }
@@ -175,7 +174,7 @@ public class EcraEventos extends JFrame{
         }
     }
 
-    public void btnVoltarActionPeformed(ActionEvent e){
+    public void btnVoltarActionPeformed(ActionEvent e) {
         setVisible(false);
     }
 }

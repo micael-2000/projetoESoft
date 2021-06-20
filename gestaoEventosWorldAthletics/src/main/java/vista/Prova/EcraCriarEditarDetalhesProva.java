@@ -1,6 +1,7 @@
 package vista.Prova;
 
 import modelo.DadosAplicacao;
+import modelo.Genero;
 import modelo.ProvaDadosPreDefinidos;
 
 import javax.swing.*;
@@ -10,7 +11,7 @@ public class EcraCriarEditarDetalhesProva extends JDialog{
     private JPanel painelDetalhesEditarProva;
     private JLabel tipoEcra;
     private JTextField nome;
-    private JTextField genero;
+    private JComboBox genero;
     private JTextField categoria;
     private JTextField local;
     private JTextField tipoProva;
@@ -28,6 +29,9 @@ public class EcraCriarEditarDetalhesProva extends JDialog{
     private JLabel eventosEmQueDecorreuLabel;
 
     public EcraCriarEditarDetalhesProva(ProvaDadosPreDefinidos prova, String tipoEcra){
+        genero.addItem(Genero.MASCULINO);
+        genero.addItem(Genero.FEMININO);
+
         //Criar Prova
         if(tipoEcra.equals("Criar")){
             this.tipoEcra.setText("Criar");
@@ -55,7 +59,7 @@ public class EcraCriarEditarDetalhesProva extends JDialog{
     public void carregarDados(ProvaDadosPreDefinidos prova){
         id.setText(Integer.toString(prova.getId()));
         nome.setText(prova.getNome());
-        genero.setText(prova.getGenero());
+        genero.setSelectedItem(prova.getGenero());
         categoria.setText(prova.getCategoria());
         local.setText(prova.getLocal());
         tipoProva.setText(prova.getTipoProva());
@@ -67,7 +71,7 @@ public class EcraCriarEditarDetalhesProva extends JDialog{
 
     public void editavel(boolean bool){
         nome.setEditable(bool);
-        genero.setEditable(bool);
+        genero.setEnabled(bool);
         categoria.setEditable(bool);
         local.setEditable(bool);
         tipoProva.setEditable(bool);
@@ -96,6 +100,7 @@ public class EcraCriarEditarDetalhesProva extends JDialog{
 
     private void btnVoltarActionPerformed(ActionEvent e) {
       setVisible(false);
+      getParent().setVisible(true);
     }
 
     private void btnGuardarActionPerformed(ActionEvent e) {
@@ -104,46 +109,41 @@ public class EcraCriarEditarDetalhesProva extends JDialog{
             // mostrar erro
         }
         else{
-            if (genero.getText().isEmpty()){
+            if (categoria.getText().isEmpty()) {
                 // mostrar erro
-            }
-            else{
-                if (categoria.getText().isEmpty()) {
+            } else {
+                if(local.getText().isEmpty()){
                     // mostrar erro
-                } else {
-                    if(local.getText().isEmpty()){
+                }
+                else{
+                    if(tipoProva.getText().isEmpty()){
                         // mostrar erro
                     }
                     else{
-                        if(tipoProva.getText().isEmpty()){
-                            // mostrar erro
+                        if(tipoEcra.getText().equals("Criar")){
+                            prova = new ProvaDadosPreDefinidos(nome.getText(), categoria.getText(), local.getText(), tipoProva.getText(), Genero.valueOf(genero.getSelectedItem().toString()), notas.getText());
+                            DadosAplicacao.INSTANCE.addProva(prova);
+
+                            JOptionPane.showMessageDialog(this,"Foi criado a Prova");
+                            recordesEventosVisibilidade(true);
+                        } else if(tipoEcra.getText().equals("Editar")){
+                            prova = DadosAplicacao.INSTANCE.getProvaDadosPreDefinidos(Integer.parseInt(id.getText()));
+                            prova.setNome(nome.getText());
+                            prova.setNotas(notas.getText());
+                            prova.setLocal(local.getText());
+                            prova.setGenero(Genero.valueOf(genero.getSelectedItem().toString()));
+                            prova.setCategoria(categoria.getText());
+                            prova.setEventosEmQueDecorreu(eventosEmQueDecorreu.getText());
+                            prova.setRecordistas(recordistas.getText());
+                            prova.setRecordesMundialAtual(recordesMundialAtual.getText());
+
+                            JOptionPane.showMessageDialog(this,"Prova editada com sucesso");
                         }
-                        else{
-                            if(tipoEcra.getText().equals("Criar")){
-                                prova = new ProvaDadosPreDefinidos(nome.getText(), genero.getText(), categoria.getText(), local.getText(), tipoProva.getText(), notas.getText());
-                                DadosAplicacao.INSTANCE.addProva(prova);
 
-                                JOptionPane.showMessageDialog(this,"Foi criado a Prova");
-                                recordesEventosVisibilidade(true);
-                            } else if(tipoEcra.getText().equals("Editar")){
-                                prova = DadosAplicacao.INSTANCE.getProvaDadosPreDefinidos(Integer.parseInt(id.getText()));
-                                prova.setNome(nome.getText());
-                                prova.setNotas(notas.getText());
-                                prova.setLocal(local.getText());
-                                prova.setGenero(genero.getText());
-                                prova.setCategoria(categoria.getText());
-                                prova.setEventosEmQueDecorreu(eventosEmQueDecorreu.getText());
-                                prova.setRecordistas(recordistas.getText());
-                                prova.setRecordesMundialAtual(recordesMundialAtual.getText());
-
-                                JOptionPane.showMessageDialog(this,"Prova editada com sucesso");
-                            }
-
-                            editavel(false);
-                            tipoEcra.setText("Detalhes");
-                            editarButton.setVisible(true);
-                            guardarButton.setVisible(false);
-                        }
+                        editavel(false);
+                        tipoEcra.setText("Detalhes");
+                        editarButton.setVisible(true);
+                        guardarButton.setVisible(false);
                     }
                 }
             }

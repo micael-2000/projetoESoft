@@ -7,6 +7,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class EcraCriarEditarEvento extends JDialog {
     private JTextField nomeEvento;
@@ -24,9 +25,9 @@ public class EcraCriarEditarEvento extends JDialog {
     private int posicaoEvento;
 
     //E chamado este metodo quando for para editar
-    public EcraCriarEditarEvento(Evento evento, int posicaoEvento){
+    public EcraCriarEditarEvento(Evento evento){
         this();
-        this.posicaoEvento = posicaoEvento;
+        this.posicaoEvento = DadosAplicacao.INSTANCE.getIndiceEvento(evento);
         nomeEvento.setText(evento.getNomeEvento());
         dataInicio.setText(evento.getDataInicio().toString());
         dataFim.setText(evento.getDataFim().toString());
@@ -64,6 +65,7 @@ public class EcraCriarEditarEvento extends JDialog {
         });
 
         guardarButton.addActionListener(this::btnGuardarActionPerformed);
+        cancelarButton.addActionListener(this::btnCancelarActionPerformed);
 
         setContentPane(painelCriarEditarEvento);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -79,45 +81,46 @@ public class EcraCriarEditarEvento extends JDialog {
 
     private void btnGuardarActionPerformed(ActionEvent e) {
         if(nomeEvento.getText().isEmpty()){
-            // mostrar erro
+            Erro.mostrarErro("Evento", 1);
         }
         else{
             if (dataInicio.getText().isEmpty()){
-                // mostrar erro
+                Erro.mostrarErro("Evento", 2);
             }
             else{
                 Data dataInicioVerificado = Data.parse(dataInicio.getText());
 
                 if (dataInicioVerificado == null){
-                    //mostrar erro
+                    Erro.mostrarErro("Evento", 3);
                 }
                 else{
                     if(!dataInicioVerificado.isValida()){
-                        //mostrar erro
+                        Erro.mostrarErro("Evento", 4);
                     }
                     else {
                         if (dataFim.getText().isEmpty()) {
-                            // mostrar erro
+                            Erro.mostrarErro("Evento", 5);
                         } else {
                             Data dataFimVerificado = Data.parse(dataFim.getText());
 
                             if (dataFimVerificado == null) {
-                                //mostrar erro
+                                Erro.mostrarErro("Evento", 6);
                             } else {
                                 if (!dataFimVerificado.isValida()) {
-                                    //mostrar erro
+                                    Erro.mostrarErro("Evento", 7);
                                 } else {
                                     if(local.getText().isEmpty()){
-                                        // mostrar erro
+                                        Erro.mostrarErro("Evento", 8);
                                     }
                                     else{
                                         if(pais.getText().isEmpty()){
-                                            // mostrar erro
+                                            Erro.mostrarErro("Evento", 9);
                                         }
                                         else{
                                             ArrayList<Prova> listaProvasDoEvento = new ArrayList<>();
                                             for (int i = 0; i < modelProvasEvento.getSize(); i++) {
-                                                int idProva = Integer.parseInt(modelProvasEvento.getElementAt(i).substring(0, 2));
+                                                Scanner scanner = new Scanner(modelProvasEvento.getElementAt(i));
+                                                int idProva = scanner.nextInt();
                                                 ProvaDadosPreDefinidos prova = DadosAplicacao.INSTANCE.getProvaDadosPreDefinidos(idProva);
                                                 if(prova != null) {
                                                     listaProvasDoEvento.add(new Prova(prova));
@@ -141,7 +144,6 @@ public class EcraCriarEditarEvento extends JDialog {
                                             }
 
                                             setVisible(false);
-                                            this.getParent().setVisible(false);
                                             new EcraEventos();
                                         }
                                     }
@@ -152,5 +154,9 @@ public class EcraCriarEditarEvento extends JDialog {
                 }
             }
         }
+    }
+
+    private void btnCancelarActionPerformed(ActionEvent e){
+        setVisible(false);
     }
 }

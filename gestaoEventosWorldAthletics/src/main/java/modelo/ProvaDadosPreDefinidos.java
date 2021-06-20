@@ -8,13 +8,13 @@ public class ProvaDadosPreDefinidos {
     private String categoria;
     private String local;
     private String tipoProva;
-    private String genero;
+    private Genero genero;
     private String notas;
     private String recordesMundialAtual;
     private String recordistas;
     private String eventosEmQueDecorreu;
 
-    public ProvaDadosPreDefinidos(String nome, String categoria, String local, String tipoProva, String genero, String notas) {
+    public ProvaDadosPreDefinidos(String nome, String categoria, String local, String tipoProva, Genero genero, String notas) {
         this.id = DadosAplicacao.INSTANCE.getSizeProvasPreDefinidos() + 1;
         this.nome = nome;
         this.categoria = categoria;
@@ -63,11 +63,11 @@ public class ProvaDadosPreDefinidos {
         this.tipoProva = tipoProva;
     }
 
-    public String getGenero() {
+    public Genero getGenero() {
         return genero;
     }
 
-    public void setGenero(String genero) {
+    public void setGenero(Genero genero) {
         this.genero = genero;
     }
 
