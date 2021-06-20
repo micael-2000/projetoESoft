@@ -49,11 +49,11 @@ public class EcraEventos extends JFrame{
 
                     //consultar evento
                     if(column == 1){
-                        new EcraProgramaEvento();
+                        //new EcraProgramaEvento();
                     }
                     //Editar evento
                     if(column == 4){
-                        new EcraCriarEditarEvento(DadosAplicacao.INSTANCE.getListaEventos().get(row));
+                        btnEditarEventoActionPerformed(row);
                     }
                     //Exportar evento
                     else if(column == 5){
@@ -61,13 +61,7 @@ public class EcraEventos extends JFrame{
                     }
                     //Eliminar evento
                     else if(column == 6){
-                        int input = JOptionPane.showConfirmDialog(null, "Confirma a eliminação do evento: " + DadosAplicacao.INSTANCE.getEvento(row).getNomeEvento());
-
-                        if(input == 0){
-                            DadosAplicacao.INSTANCE.removeEvento(row);
-                            JOptionPane.showMessageDialog(null,"Foi eliminado o Evento");
-                            atualizarTabela();
-                        }
+                        btnEliminarEventoActionPerformed(row);
                     }
                 }
             }
@@ -91,8 +85,8 @@ public class EcraEventos extends JFrame{
     }
 
     private void btnCriarEventoActionPerformed(ActionEvent e) {
-        new EcraCriarEditarEvento();
         setVisible(false);
+        new EcraCriarEditarEvento();
     }
 
     private void btnImportarEventoActionPerformed(ActionEvent e) {
@@ -177,4 +171,21 @@ public class EcraEventos extends JFrame{
     public void btnVoltarActionPeformed(ActionEvent e) {
         setVisible(false);
     }
+
+    public void btnEliminarEventoActionPerformed(int posicaoEvento){
+        int input = JOptionPane.showConfirmDialog(null, "Confirma a eliminação do evento: " + DadosAplicacao.INSTANCE.getEvento(posicaoEvento).getNomeEvento());
+
+        if(input == 0){
+            DadosAplicacao.INSTANCE.removeEvento(posicaoEvento);
+            JOptionPane.showMessageDialog(null,"Foi eliminado o Evento");
+            atualizarTabela();
+        }
+    }
+
+    public void btnEditarEventoActionPerformed(int posicaoEvento) {
+        new EcraCriarEditarEvento(DadosAplicacao.INSTANCE.getListaEventos().get(posicaoEvento));
+    }
+
+
+
 }
