@@ -45,9 +45,8 @@ public class EcraCriarEditarEvento extends JDialog {
         listaProvasEvento.setModel(modelProvasEvento);
 
         //adiciona elementos a lista de provas disponiveis porque e a criacao do evento
-        for (String nomeProva : DadosAplicacao.INSTANCE.listaProvasDadosPreDefinidos.keySet()) {
-            System.out.println(nomeProva);
-            modelProvasDisponives.addElement(nomeProva);
+        for (ProvaDadosPreDefinidos prova : DadosAplicacao.INSTANCE.getListaProvasDadosPreDefinidos()) {
+            modelProvasDisponives.addElement(prova.getId() + " - " + prova.getNome());
         }
 
         listaProvasDisponiveis.addListSelectionListener(new ListSelectionListener() {
@@ -118,7 +117,8 @@ public class EcraCriarEditarEvento extends JDialog {
                                         else{
                                             ArrayList<Prova> listaProvasDoEvento = new ArrayList<>();
                                             for (int i = 0; i < modelProvasEvento.getSize(); i++) {
-                                                ProvaDadosPreDefinidos prova = DadosAplicacao.INSTANCE.listaProvasDadosPreDefinidos.get(modelProvasEvento.getElementAt(i));
+                                                int idProva = Integer.parseInt(modelProvasEvento.getElementAt(i).substring(0, 2));
+                                                ProvaDadosPreDefinidos prova = DadosAplicacao.INSTANCE.getProvaDadosPreDefinidos(idProva);
                                                 if(prova != null) {
                                                     listaProvasDoEvento.add(new Prova(prova));
                                                 }

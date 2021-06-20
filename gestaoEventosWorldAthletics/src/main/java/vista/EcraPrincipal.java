@@ -1,6 +1,9 @@
 package vista;
 
 import modelo.DadosAplicacao;
+import modelo.Data;
+import modelo.Evento;
+import modelo.ProvaDadosPreDefinidos;
 import vista.Evento.EcraEventos;
 import vista.Prova.EcraProvas;
 
@@ -41,6 +44,14 @@ public class EcraPrincipal extends JFrame{
 
     public static void main(String[] args) {
         new DadosAplicacao();
+        ProvaDadosPreDefinidos prova = new ProvaDadosPreDefinidos("Prova1", "Corrida", "Pista exterior", "Eliminatórias", "Feminino", " ");
+        DadosAplicacao.INSTANCE.addProva(prova);
+        prova = new ProvaDadosPreDefinidos("Prova2", "Corrida", "Pista exterior", "Eliminatórias", "Feminino", " ");
+        DadosAplicacao.INSTANCE.addProva(prova);
+
+        DadosAplicacao.INSTANCE.addEvento(new Evento(null, new Data(), new Data(), "Lisboa", "Portugal", "Evento teste"));
+        DadosAplicacao.INSTANCE.addEvento(new Evento(null, new Data(), new Data(), "Marinha", "Antártida", "Evento teste 2"));
+
         new EcraPrincipal("Gestao Eventos").setVisible(true);
     }
 }

@@ -1,5 +1,7 @@
 package modelo;
 
+import javafx.util.Pair;
+
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -8,19 +10,15 @@ import java.util.Iterator;
 
 public class DadosAplicacao {
     public static DadosAplicacao INSTANCE = new DadosAplicacao();
-    public HashMap<String, ProvaDadosPreDefinidos> listaProvasDadosPreDefinidos;
+    private HashMap<Integer, ProvaDadosPreDefinidos> listaProvasDadosPreDefinidos;
     private ArrayList<Evento> listaEventos;
 
     public DadosAplicacao() {
         //Provas pre definido
         listaProvasDadosPreDefinidos = new HashMap<>(30);
-        listaProvasDadosPreDefinidos.put("Prova1", new ProvaDadosPreDefinidos("Prova1", "Corrida", "Pista exterior", "Eliminatórias", "Feminino", " "));
-        listaProvasDadosPreDefinidos.put("Prova2", new ProvaDadosPreDefinidos("Prova2", "Corrida", "Pista exterior", "Eliminatórias", "Feminino", " "));
 
         //Eventos
         listaEventos = new ArrayList<>();
-        listaEventos.add(new Evento(null, new Data(), new Data(), "Lisboa", "Portugal", "Evento teste"));
-        listaEventos.add(new Evento(null, new Data(), new Data(), "Marinha", "Antártida", "Evento teste 2"));
     }
 
     public boolean existsProva(){
@@ -32,7 +30,7 @@ public class DadosAplicacao {
     }
 
     public void addProva(ProvaDadosPreDefinidos prova){
-        listaProvasDadosPreDefinidos.put(prova.getNome(), prova);
+        listaProvasDadosPreDefinidos.put(prova.getId(), prova);
     }
 
     public void removeEvento(int posicao){
@@ -55,16 +53,18 @@ public class DadosAplicacao {
         return listaProvasDadosPreDefinidos.values();
     }
 
-    public ProvaDadosPreDefinidos getProvaDadosPreDefinidos(String nomeProva) {
-        return listaProvasDadosPreDefinidos.get(nomeProva);
+    public ProvaDadosPreDefinidos getProvaDadosPreDefinidos(Integer idProva) {
+        return listaProvasDadosPreDefinidos.get(idProva);
     }
 
-    public void removeProvaDadosPreDefinidos(String nomeProva){
-        System.out.println(nomeProva);
-        listaProvasDadosPreDefinidos.remove(nomeProva);
+    public void removeProvaDadosPreDefinidos(int idProva){
+        listaProvasDadosPreDefinidos.remove(idProva);
     }
 
     public int getSizeProvasPreDefinidos(){
+        if (listaProvasDadosPreDefinidos.isEmpty()){
+            return 0;
+        }
         return listaProvasDadosPreDefinidos.size();
     }
 

@@ -22,11 +22,13 @@ public class EcraEventos extends JFrame{
     private JButton criarEventoButton;
     private JButton voltarButton;
     private JTable tabelaEventos;
+    private JScrollPane scrollPane;
     DefaultTableModel model;
 
     public EcraEventos(){
         criarEventoButton.addActionListener(this::btnCriarEventoActionPerformed);
         importarEventoButton.addActionListener(this::btnImportarEventoActionPerformed);
+        voltarButton.addActionListener(this::btnVoltarActionPeformed);
 
         atualizarTabela();
         TableColumnModel tcm = tabelaEventos.getColumnModel();
@@ -36,6 +38,7 @@ public class EcraEventos extends JFrame{
 
         //bloqueia o user de editar as celulas
         tabelaEventos.setDefaultEditor(Object.class, null);
+        scrollPane.setViewportView(tabelaEventos);
 
         tabelaEventos.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
@@ -69,6 +72,17 @@ public class EcraEventos extends JFrame{
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         pack();
         setVisible(true);
+    }
+
+    private void atualizarTabela(){
+        Object columnNames[] = {"Data", "Evento", "Cidade", "País", "", "", ""};
+
+        model = new DefaultTableModel(null, columnNames);
+        tabelaEventos.setModel(model);
+
+        for (Evento evento: DadosAplicacao.INSTANCE.getListaEventos()) {
+            model.addRow(new Object[]{evento.getDataInicio() + "-" + evento.getDataFim(), evento.getNomeEvento(), evento.getLocal(), evento.getPais(), "Editar", "Exportar Dados", "Eliminar"});
+        }
     }
 
     private void btnCriarEventoActionPerformed(ActionEvent e) {
@@ -133,17 +147,6 @@ public class EcraEventos extends JFrame{
         }
     }
 
-    private void atualizarTabela(){
-        Object columnNames[] = {"Data", "Evento", "Cidade", "País", "", "", ""};
-
-        model = new DefaultTableModel(null, columnNames);
-        tabelaEventos.setModel(model);
-
-        for (Evento evento: DadosAplicacao.INSTANCE.getListaEventos()) {
-            model.addRow(new Object[]{evento.getDataInicio() + "-" + evento.getDataFim(), evento.getNomeEvento(), evento.getLocal(), evento.getPais(), "Editar", "Exportar Dados", "Eliminar"});
-        }
-    }
-
     public void btnExportarEventoActionPerformed(int posicaoEvento) {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Guardar como");
@@ -170,5 +173,9 @@ public class EcraEventos extends JFrame{
                 e.printStackTrace();
             }
         }
+    }
+
+    public void btnVoltarActionPeformed(ActionEvent e){
+        setVisible(false);
     }
 }

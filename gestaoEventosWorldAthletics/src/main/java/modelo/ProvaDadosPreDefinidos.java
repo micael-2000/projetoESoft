@@ -3,7 +3,7 @@ package modelo;
 import java.util.ArrayList;
 
 public class ProvaDadosPreDefinidos {
-    private static int id;
+    private int id;
     private String nome;
     private String categoria;
     private String local;
@@ -15,6 +15,7 @@ public class ProvaDadosPreDefinidos {
     private String eventosEmQueDecorreu;
 
     public ProvaDadosPreDefinidos(String nome, String categoria, String local, String tipoProva, String genero, String notas) {
+        this.id = DadosAplicacao.INSTANCE.getSizeProvasPreDefinidos() + 1;
         this.nome = nome;
         this.categoria = categoria;
         this.local = local;
@@ -26,7 +27,7 @@ public class ProvaDadosPreDefinidos {
         eventosEmQueDecorreu = null;
     }
 
-    public static int getId() {
+    public int getId() {
         return id;
     }
 

@@ -22,15 +22,19 @@ public class EcraProvas extends JFrame{
     private JButton voltarButton;
     private JTable tabelaProvasPreDefinidas;
     private JButton importarProvasButton;
+    private JScrollPane scrollPane;
     DefaultTableModel model;
 
     public EcraProvas(){
         criarProvaButton.addActionListener(this::btnCriarProvaActionPerformed);
         importarProvasButton.addActionListener(this::btnImportarProvasActionPerformed);
+        exportarProvasButton.addActionListener(this::btnExportarProvasActionPerformed);
+        voltarButton.addActionListener(this::btnVoltarActionPerformed);
 
         atualizarTabela();
         TableColumnModel tcm = tabelaProvasPreDefinidas.getColumnModel();
         tcm.getColumn(1).setPreferredWidth(300);
+        scrollPane.setViewportView(tabelaProvasPreDefinidas);
 
         //bloqueia o user de editar as celulas
         tabelaProvasPreDefinidas.setDefaultEditor(Object.class, null);
@@ -44,17 +48,17 @@ public class EcraProvas extends JFrame{
 
                     //Detalhes / Editar prova
                     if(column == 1){
-                        new EcraDetalhesEditarProva(DadosAplicacao.INSTANCE.getProvaDadosPreDefinidos(tabelaProvasPreDefinidas.getValueAt(row, 1).toString()), "Detalhes");
+                        new EcraCriarEditarDetalhesProva(DadosAplicacao.INSTANCE.getProvaDadosPreDefinidos(Integer.parseInt(tabelaProvasPreDefinidas.getValueAt(row, 0).toString())), "Detalhes");
                     }
                     //Eliminar prova
                     else if(column == 3){
-                        String nomeProva = tabelaProvasPreDefinidas.getValueAt(row, 1).toString();
+                        int idProva = Integer.parseInt(tabelaProvasPreDefinidas.getValueAt(row, 0).toString());
 
-                        int input = JOptionPane.showConfirmDialog(null, "Confirma a eliminação da Prova: " + nomeProva);
+                        int input = JOptionPane.showConfirmDialog(null, "Confirma a eliminação da Prova: " + tabelaProvasPreDefinidas.getValueAt(row, 1).toString());
 
                         if(input == 0){
-                            DadosAplicacao.INSTANCE.removeProvaDadosPreDefinidos(nomeProva);
-                            JOptionPane.showMessageDialog(null,"Foi eliminado a Prova");
+                            DadosAplicacao.INSTANCE.removeProvaDadosPreDefinidos(idProva);
+                            JOptionPane.showMessageDialog(null,"Prova eliminada com sucesso");
                             atualizarTabela();
                         }
                     }
@@ -80,7 +84,7 @@ public class EcraProvas extends JFrame{
     }
 
     private void btnCriarProvaActionPerformed(ActionEvent e) {
-        new EcraDetalhesEditarProva(null, "Criar");
+        new EcraCriarEditarDetalhesProva(null, "Criar");
     }
 
     private void btnImportarProvasActionPerformed(ActionEvent e) {
@@ -99,31 +103,16 @@ public class EcraProvas extends JFrame{
                 String line = "";
                 String[] tempArr;
 
-                line = br.readLine();
-                tempArr = line.split(delimiter);
+                while((line = br.readLine()) != null){
+                    tempArr = line.split(delimiter);
 
-                if(tempArr.length != 5){
-                    //mostrar erro
-                }
-                else{
-                    //DataInicio
-                    Data dataInicio = Data.parse(tempArr[0]);
-                    if(dataInicio.isValida() == false){
+                    if(tempArr.length != 6 && tempArr.length != 5){
                         //mostrar erro
-                    }else{
-                        //DataFim
-                        Data dataFim = Data.parse(tempArr[1]);
-                        if(dataFim.isValida() == false){
-                            //mostrar erro
-                        }
-                        else{
-                            //tempArr[2] - nomeEvento
-                            //tempArr[3] - local
-                            //tempArr[4] - pais
-                            Evento evento = new Evento(null, dataInicio, dataFim, tempArr[2], tempArr[3], tempArr[4]);
-                            DadosAplicacao.INSTANCE.addEvento(evento);
-                            new EcraCriarEditarEvento(evento, DadosAplicacao.INSTANCE.getListaEventos().indexOf(evento));
-                        }
+                    }
+                    else{
+                        //String nome, String categoria, String local, String tipoProva, String genero, String notas
+                        ProvaDadosPreDefinidos prova = new ProvaDadosPreDefinidos(tempArr[0], tempArr[1], tempArr[2], tempArr[3], tempArr[4], tempArr[5]);
+                        DadosAplicacao.INSTANCE.addProva(prova);
                     }
                 }
 
@@ -132,9 +121,10 @@ public class EcraProvas extends JFrame{
                 ioe.printStackTrace();
             }
         }
+        atualizarTabela();
     }
 
-    public void btnExportarProvasActionPerformed(int posicaoEvento) {
+    public void btnExportarProvasActionPerformed(ActionEvent e) {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Guardar como");
         int userSelection = fileChooser.showSaveDialog(this);
@@ -149,18 +139,20 @@ public class EcraProvas extends JFrame{
 
                 CSVWriter writer = new CSVWriter(outputfile, ';', CSVWriter.NO_QUOTE_CHARACTER,  CSVWriter.DEFAULT_ESCAPE_CHARACTER, CSVWriter.DEFAULT_LINE_END);
 
-                Evento evento = DadosAplicacao.INSTANCE.getEvento(posicaoEvento);
-                //DataInicio, DataFim, local, pais, nomeEvento
-                String[] data = {evento.getDataInicio().toString(), evento.getDataFim().toString(), evento.getLocal(), evento.getPais(), evento.getNomeEvento()};
-                writer.writeNext(data);
-
+                for (ProvaDadosPreDefinidos prova : DadosAplicacao.INSTANCE.getListaProvasDadosPreDefinidos()) {
+                    //String nome, String categoria, String local, String tipoProva, String genero, String notas
+                    String[] data = {prova.getNome(), prova.getCategoria(), prova.getLocal(), prova.getTipoProva(), prova.getGenero(), prova.getNotas()};
+                    writer.writeNext(data);
+                }
                 writer.close();
             }
-            catch (IOException e) {
-                e.printStackTrace();
+            catch (IOException ex) {
+                ex.printStackTrace();
             }
         }
     }
 
-
+    public void btnVoltarActionPerformed(ActionEvent e){
+        setVisible(false);
+    }
 }

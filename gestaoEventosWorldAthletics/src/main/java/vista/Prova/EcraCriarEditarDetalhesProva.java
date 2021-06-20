@@ -6,7 +6,7 @@ import modelo.ProvaDadosPreDefinidos;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 
-public class EcraDetalhesEditarProva extends JDialog{
+public class EcraCriarEditarDetalhesProva extends JDialog{
     private JPanel painelDetalhesEditarProva;
     private JLabel tipoEcra;
     private JTextField nome;
@@ -27,18 +27,13 @@ public class EcraDetalhesEditarProva extends JDialog{
     private JLabel notasLabel;
     private JLabel eventosEmQueDecorreuLabel;
 
-    public EcraDetalhesEditarProva(ProvaDadosPreDefinidos prova, String tipoEcra){
+    public EcraCriarEditarDetalhesProva(ProvaDadosPreDefinidos prova, String tipoEcra){
         //Criar Prova
         if(tipoEcra.equals("Criar")){
             this.tipoEcra.setText("Criar");
             id.setText(Integer.toString(DadosAplicacao.INSTANCE.getSizeProvasPreDefinidos() + 1));
             editarButton.setVisible(false);
-            recordesMundialAtualLabel.setVisible(false);
-            recordistasLabel.setVisible(false);
-            eventosEmQueDecorreuLabel.setVisible(false);
-            recordistas.setVisible(false);
-            recordesMundialAtual.setVisible(false);
-            eventosEmQueDecorreu.setVisible(false);
+            recordesEventosVisibilidade(false);
         }
         //Detalhes Prova
         else if(tipoEcra.equals("Detalhes")){
@@ -82,6 +77,15 @@ public class EcraDetalhesEditarProva extends JDialog{
         eventosEmQueDecorreu.setEditable(bool);
     }
 
+    public void recordesEventosVisibilidade(boolean bool){
+        recordesMundialAtualLabel.setVisible(bool);
+        recordistasLabel.setVisible(bool);
+        eventosEmQueDecorreuLabel.setVisible(bool);
+        recordistas.setVisible(bool);
+        recordesMundialAtual.setVisible(bool);
+        eventosEmQueDecorreu.setVisible(bool);
+    }
+
     private void btnEditarActionPerformed(ActionEvent e) {
         this.tipoEcra.setText("Editar");
         editavel(true);
@@ -120,8 +124,9 @@ public class EcraDetalhesEditarProva extends JDialog{
                                 DadosAplicacao.INSTANCE.addProva(prova);
 
                                 JOptionPane.showMessageDialog(this,"Foi criado a Prova");
+                                recordesEventosVisibilidade(true);
                             } else if(tipoEcra.getText().equals("Editar")){
-                                prova = DadosAplicacao.INSTANCE.getProvaDadosPreDefinidos(nome.getText());
+                                prova = DadosAplicacao.INSTANCE.getProvaDadosPreDefinidos(Integer.parseInt(id.getText()));
                                 prova.setNome(nome.getText());
                                 prova.setNotas(notas.getText());
                                 prova.setLocal(local.getText());
@@ -130,9 +135,12 @@ public class EcraDetalhesEditarProva extends JDialog{
                                 prova.setEventosEmQueDecorreu(eventosEmQueDecorreu.getText());
                                 prova.setRecordistas(recordistas.getText());
                                 prova.setRecordesMundialAtual(recordesMundialAtual.getText());
+
+                                JOptionPane.showMessageDialog(this,"Prova editada com sucesso");
                             }
 
                             editavel(false);
+                            tipoEcra.setText("Detalhes");
                             editarButton.setVisible(true);
                             guardarButton.setVisible(false);
                         }
