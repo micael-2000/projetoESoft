@@ -121,7 +121,7 @@ public class EcraCriarEditarDetalhesProva extends JDialog{
                     }
                     else{
                         if(tipoEcra.getText().equals("Criar")){
-                            prova = new ProvaDadosPreDefinidos(nome.getText(), categoria.getText(), local.getText(), tipoProva.getText(), Genero.valueOf(genero.getSelectedItem().toString()), notas.getText());
+                            prova = new ProvaDadosPreDefinidos(nome.getText(), categoria.getText(), local.getText(), tipoProva.getText(), Genero.valueOf(genero.getSelectedItem().toString()), notas.getText(), -1);
                             DadosAplicacao.INSTANCE.addProva(prova);
 
                             JOptionPane.showMessageDialog(this,"Foi criado a Prova");

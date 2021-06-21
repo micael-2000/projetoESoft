@@ -6,6 +6,7 @@ import vista.Prova.EcraProvas;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
 
 public class EcraPrincipal extends JFrame{
     private JButton eventosButton;
@@ -41,13 +42,17 @@ public class EcraPrincipal extends JFrame{
 
     public static void main(String[] args) {
         new DadosAplicacao();
-        ProvaDadosPreDefinidos prova = new ProvaDadosPreDefinidos("Prova1", "Corrida", "Pista exterior", "Eliminatórias", Genero.FEMININO, " ");
-        DadosAplicacao.INSTANCE.addProva(prova);
-        prova = new ProvaDadosPreDefinidos("Prova2", "Corrida", "Pista exterior", "Eliminatórias", Genero.MASCULINO, " ");
-        DadosAplicacao.INSTANCE.addProva(prova);
 
-        DadosAplicacao.INSTANCE.addEvento(new Evento(null, new Data(), new Data(), "Lisboa", "Portugal", "Evento teste"));
-        DadosAplicacao.INSTANCE.addEvento(new Evento(null, new Data(), new Data(), "Marinha", "Antártida", "Evento teste 2"));
+        ArrayList<Prova> provas = new ArrayList<>();
+        ProvaDadosPreDefinidos prova = new ProvaDadosPreDefinidos("Prova1", "Corrida", "Pista exterior", "Eliminatórias", Genero.FEMININO, " ", -1);
+        DadosAplicacao.INSTANCE.addProva(prova);
+        provas.add(new Prova(prova));
+        prova = new ProvaDadosPreDefinidos("Prova2", "Corrida", "Pista exterior", "Eliminatórias", Genero.MASCULINO, " ", -1);
+        DadosAplicacao.INSTANCE.addProva(prova);
+        provas.add(new Prova(prova));
+
+        DadosAplicacao.INSTANCE.addEvento(new Evento(provas, new Data(), new Data(), "Lisboa", "Portugal", "Evento teste"));
+        DadosAplicacao.INSTANCE.addEvento(new Evento(provas, new Data(), new Data(), "Marinha", "Antártida", "Evento teste 2"));
 
         new EcraPrincipal("Gestao Eventos").setVisible(true);
     }

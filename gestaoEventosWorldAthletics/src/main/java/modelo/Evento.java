@@ -19,6 +19,19 @@ public class Evento {
         this.nomeEvento = nomeEvento;
     }
 
+    public ArrayList<Prova> getListaProvas() {
+        return listaProvas;
+    }
+
+    public ArrayList<Integer> getIdProvas(){
+        ArrayList<Integer> arrayIds = new ArrayList<>();
+        for (Prova prova : listaProvas) {
+            arrayIds.add(prova.getId());
+        }
+        System.out.println(arrayIds.toString());
+        return arrayIds;
+    }
+
     public Data getDataInicio() {
         return dataInicio;
     }

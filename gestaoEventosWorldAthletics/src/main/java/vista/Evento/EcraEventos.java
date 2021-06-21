@@ -23,12 +23,13 @@ public class EcraEventos extends JFrame{
     private JButton voltarButton;
     private JTable tabelaEventos;
     private JScrollPane scrollPane;
-    DefaultTableModel model;
+    private DefaultTableModel model;
 
     public EcraEventos(){
         criarEventoButton.addActionListener(this::btnCriarEventoActionPerformed);
         importarEventoButton.addActionListener(this::btnImportarEventoActionPerformed);
         voltarButton.addActionListener(this::btnVoltarActionPeformed);
+        rankingsButton.addActionListener(this::btnConsultarRankingsActionPerformed);
 
         atualizarTabela();
         TableColumnModel tcm = tabelaEventos.getColumnModel();
@@ -86,7 +87,7 @@ public class EcraEventos extends JFrame{
 
     private void btnCriarEventoActionPerformed(ActionEvent e) {
         setVisible(false);
-        new EcraCriarEditarEvento();
+        new EcraCriarEditarEvento(false);
     }
 
     private void btnImportarEventoActionPerformed(ActionEvent e) {
@@ -183,9 +184,11 @@ public class EcraEventos extends JFrame{
     }
 
     public void btnEditarEventoActionPerformed(int posicaoEvento) {
+        setVisible(false);
         new EcraCriarEditarEvento(DadosAplicacao.INSTANCE.getListaEventos().get(posicaoEvento));
     }
 
-
-
+    public void btnConsultarRankingsActionPerformed(ActionEvent e){
+        new EcraRankings();
+    }
 }

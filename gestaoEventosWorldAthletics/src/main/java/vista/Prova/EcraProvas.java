@@ -108,7 +108,7 @@ public class EcraProvas extends JFrame{
                     }
                     else{
                         //String nome, String categoria, String local, String tipoProva, String genero, String notas
-                        ProvaDadosPreDefinidos prova = new ProvaDadosPreDefinidos(tempArr[0], tempArr[1], tempArr[2], tempArr[3], Genero.valueOf(tempArr[4]), tempArr[5]);
+                        ProvaDadosPreDefinidos prova = new ProvaDadosPreDefinidos(tempArr[0], tempArr[1], tempArr[2], tempArr[3], Genero.valueOf(tempArr[4]), tempArr[5], -1);
                         DadosAplicacao.INSTANCE.addProva(prova);
                     }
                 }

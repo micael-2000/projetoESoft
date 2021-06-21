@@ -26,30 +26,24 @@ public class EcraCriarEditarEvento extends JDialog {
 
     //E chamado este metodo quando for para editar
     public EcraCriarEditarEvento(Evento evento){
-        this();
+        this(true);
         this.posicaoEvento = DadosAplicacao.INSTANCE.getIndiceEvento(evento);
         nomeEvento.setText(evento.getNomeEvento());
         dataInicio.setText(evento.getDataInicio().toString());
         dataFim.setText(evento.getDataFim().toString());
         local.setText(evento.getLocal());
         pais.setText(evento.getPais());
+        adicionarProvasNasListas(evento);
+
     }
 
     //E chamado na criacao do evento
-    public EcraCriarEditarEvento(){
+    public EcraCriarEditarEvento(boolean metodoChamadoPelaEdicao){
         posicaoEvento = -1;
 
-        modelProvasDisponives = new DefaultListModel<String>();
-        listaProvasDisponiveis.setModel(modelProvasDisponives);
-
-        modelProvasEvento = new DefaultListModel<String>();
-        listaProvasEvento.setModel(modelProvasEvento);
-
-        //adiciona elementos a lista de provas disponiveis porque e a criacao do evento
-        for (ProvaDadosPreDefinidos prova : DadosAplicacao.INSTANCE.getListaProvasDadosPreDefinidos()) {
-            modelProvasDisponives.addElement(prova.getId() + " - " + prova.getNome());
+        if(metodoChamadoPelaEdicao == false){
+            adicionarProvasNasListas(null);
         }
-
         listaProvasDisponiveis.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
@@ -73,10 +67,32 @@ public class EcraCriarEditarEvento extends JDialog {
         setVisible(true);
     }
 
-    private void gestaoListas(DefaultListModel modelSelectionHappen, DefaultListModel modelToChange, Object element){
+    private void gestaoListas(DefaultListModel modelSelectionHappen, DefaultListModel modelToAddElement, Object element){
         //se o elemento nao estiver na listaProvasEvento, entao adiciona-o e remove o que foi adicionado da listaProvasDisponiveis
-        modelToChange.addElement(element);
+        modelToAddElement.addElement(element);
         modelSelectionHappen.removeElement(element);
+    }
+
+    private void adicionarProvasNasListas(Evento evento) {
+        modelProvasDisponives = new DefaultListModel<String>();
+        listaProvasDisponiveis.setModel(modelProvasDisponives);
+        modelProvasEvento = new DefaultListModel<String>();
+        listaProvasEvento.setModel(modelProvasEvento);
+
+        ArrayList<Integer> arrayIds = null;
+
+        if (evento != null) {
+            arrayIds = evento.getIdProvas();
+        }
+
+        //adiciona elementos a lista de provas disponiveis porque e a criacao do evento
+        for (ProvaDadosPreDefinidos prova : DadosAplicacao.INSTANCE.getListaProvasDadosPreDefinidos()) {
+            if (arrayIds != null && arrayIds.contains(prova.getId())) {
+                modelProvasEvento.addElement(prova.getId() + " - " + prova.getNome());
+            } else {
+                modelProvasDisponives.addElement(prova.getId() + " - " + prova.getNome());
+            }
+        }
     }
 
     private void btnGuardarActionPerformed(ActionEvent e) {
@@ -119,10 +135,10 @@ public class EcraCriarEditarEvento extends JDialog {
                                         else{
                                             ArrayList<Prova> listaProvasDoEvento = new ArrayList<>();
                                             for (int i = 0; i < modelProvasEvento.getSize(); i++) {
-                                                Scanner scanner = new Scanner(modelProvasEvento.getElementAt(i));
-                                                int idProva = scanner.nextInt();
-                                                ProvaDadosPreDefinidos prova = DadosAplicacao.INSTANCE.getProvaDadosPreDefinidos(idProva);
-                                                if(prova != null) {
+                                                if(modelProvasEvento.getElementAt(i) != null){
+                                                    String[] tempArr = modelProvasEvento.getElementAt(i).split(" ");
+                                                    int idProva = Integer.parseInt(tempArr[0]);
+                                                    ProvaDadosPreDefinidos prova = DadosAplicacao.INSTANCE.getProvaDadosPreDefinidos(idProva);
                                                     listaProvasDoEvento.add(new Prova(prova));
                                                 }
                                             }
@@ -158,5 +174,6 @@ public class EcraCriarEditarEvento extends JDialog {
 
     private void btnCancelarActionPerformed(ActionEvent e){
         setVisible(false);
+        new EcraEventos();
     }
 }
