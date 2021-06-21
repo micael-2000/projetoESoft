@@ -73,6 +73,10 @@ public class EcraCriarEditarEvento extends JDialog {
         modelSelectionHappen.removeElement(element);
     }
 
+    private void mostrarErro(String mensagem ){
+        JOptionPane.showConfirmDialog(null, mensagem, "Erro", JOptionPane.DEFAULT_OPTION);
+    }
+
     private void adicionarProvasNasListas(Evento evento) {
         modelProvasDisponives = new DefaultListModel<String>();
         listaProvasDisponiveis.setModel(modelProvasDisponives);
@@ -97,40 +101,40 @@ public class EcraCriarEditarEvento extends JDialog {
 
     private void btnGuardarActionPerformed(ActionEvent e) {
         if(nomeEvento.getText().isEmpty()){
-            Erro.mostrarErro("Evento", 1);
+            mostrarErro("O campo \"Nome do Evento\" é obrigatório");
         }
         else{
             if (dataInicio.getText().isEmpty()){
-                Erro.mostrarErro("Evento", 2);
+                mostrarErro("O campo \"data inicio\" é obrigatório  ");
             }
             else{
                 Data dataInicioVerificado = Data.parse(dataInicio.getText());
 
                 if (dataInicioVerificado == null){
-                    Erro.mostrarErro("Evento", 3);
+                    mostrarErro( "A data do inicio tem de estar no formato \"DD-MM-YYYY\"  ");
                 }
                 else{
                     if(!dataInicioVerificado.isValida()){
-                        Erro.mostrarErro("Evento", 4);
+                        mostrarErro( "A data inicio é inválida");
                     }
                     else {
                         if (dataFim.getText().isEmpty()) {
-                            Erro.mostrarErro("Evento", 5);
+                            mostrarErro("O campo \"data fim\" é obrigatório  ");
                         } else {
                             Data dataFimVerificado = Data.parse(dataFim.getText());
 
                             if (dataFimVerificado == null) {
-                                Erro.mostrarErro("Evento", 6);
+                                mostrarErro("A data do fim tem de estar no formato \"DD-MM-YYYY\"");
                             } else {
                                 if (!dataFimVerificado.isValida()) {
-                                    Erro.mostrarErro("Evento", 7);
+                                    mostrarErro( "A data fim é inválida");
                                 } else {
                                     if(local.getText().isEmpty()){
-                                        Erro.mostrarErro("Evento", 8);
+                                        mostrarErro( "O campo \"Local\" é obrigatório");
                                     }
                                     else{
                                         if(pais.getText().isEmpty()){
-                                            Erro.mostrarErro("Evento", 9);
+                                            mostrarErro("O campo \"País\" é obrigatório  ");
                                         }
                                         else{
                                             ArrayList<Prova> listaProvasDoEvento = new ArrayList<>();
