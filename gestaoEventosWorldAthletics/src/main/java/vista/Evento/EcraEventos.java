@@ -2,7 +2,7 @@ package vista.Evento;
 
 import com.opencsv.CSVWriter;
 import modelo.*;
-import vista.Evento.EcraCriarEditarEvento;
+import vista.Evento.DetalhesEvento.EcraProgramaEvento;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -50,7 +50,7 @@ public class EcraEventos extends JFrame{
 
                     //consultar evento
                     if(column == 1){
-                        //new EcraProgramaEvento();
+                        btnConsultarEventoActionPeformed(row);
                     }
                     //Editar evento
                     if(column == 4){
@@ -189,6 +189,12 @@ public class EcraEventos extends JFrame{
     }
 
     public void btnConsultarRankingsActionPerformed(ActionEvent e){
+        setVisible(false);
         new EcraRankings();
+    }
+
+    public void btnConsultarEventoActionPeformed(int posicaoEvento){
+        setVisible(false);
+        new EcraProgramaEvento(DadosAplicacao.INSTANCE.getEvento(posicaoEvento));
     }
 }
