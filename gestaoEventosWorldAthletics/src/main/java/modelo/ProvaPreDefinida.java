@@ -12,7 +12,7 @@ public class ProvaPreDefinida {
     private String notas;
     private String recordesMundialAtual;
     private String recordistas;
-    private String eventosEmQueDecorreu;
+    private ArrayList<String> eventosEmQueDecorreu;
 
     public ProvaPreDefinida(String nome, String categoria, String local, String tipoProva, Genero genero, String notas, Integer id) {
         //Esta verificação e para quando queremos criar uma provadadospredefinidos ou uma prova, para nao tar a mudar de id
@@ -30,7 +30,7 @@ public class ProvaPreDefinida {
         this.notas = notas;
         recordesMundialAtual = null;
         recordistas = null;
-        eventosEmQueDecorreu = null;
+        eventosEmQueDecorreu = new ArrayList<>();
     }
 
     public int getId() {
@@ -101,11 +101,23 @@ public class ProvaPreDefinida {
         this.recordistas = recordistas;
     }
 
-    public String getEventosEmQueDecorreu() {
-        return eventosEmQueDecorreu;
-    }
+    public ArrayList<String> getEventosEmQueDecorreu() {
+        ArrayList<Evento> eventos = DadosAplicacao.INSTANCE.getListaEventos();
+        ArrayList<Prova> provas = null;
 
-    public void setEventosEmQueDecorreu(String eventosEmQueDecorreu) {
-        this.eventosEmQueDecorreu = eventosEmQueDecorreu;
+        for (Evento evento : eventos) {
+            provas = evento.getListaProvas();
+
+            for (Prova prova: provas) {
+                if (prova.getNome().equals(this.nome)){
+                    System.out.println(evento.getNomeEvento());
+                    eventosEmQueDecorreu.add(evento.getNomeEvento());
+
+                    break;
+                }
+            }
+        }
+
+        return eventosEmQueDecorreu;
     }
 }

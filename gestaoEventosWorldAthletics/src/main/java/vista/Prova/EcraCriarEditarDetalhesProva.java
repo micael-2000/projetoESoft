@@ -65,7 +65,10 @@ public class EcraCriarEditarDetalhesProva extends JDialog{
         tipoProva.setText(prova.getTipoProva());
         recordesMundialAtual.setText(prova.getRecordesMundialAtual());
         recordistas.setText(prova.getRecordistas());
-        eventosEmQueDecorreu.setText(prova.getEventosEmQueDecorreu());
+        for (String nome : prova.getEventosEmQueDecorreu()) {
+            eventosEmQueDecorreu.append(nome);
+            eventosEmQueDecorreu.append("\n");
+        }
         notas.setText(prova.getNotas());
     }
 
@@ -137,9 +140,8 @@ public class EcraCriarEditarDetalhesProva extends JDialog{
                             prova.setLocal(local.getText());
                             prova.setGenero(Genero.valueOf(genero.getSelectedItem().toString()));
                             prova.setCategoria(categoria.getText());
-                            prova.setEventosEmQueDecorreu(eventosEmQueDecorreu.getText());
-                            prova.setRecordistas(recordistas.getText());
-                            prova.setRecordesMundialAtual(recordesMundialAtual.getText());
+                            //prova.setRecordistas(recordistas.getText());
+                            //prova.setRecordesMundialAtual(recordesMundialAtual.getText());
 
                             JOptionPane.showMessageDialog(this,"Prova editada com sucesso");
                         }

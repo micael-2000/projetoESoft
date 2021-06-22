@@ -7,11 +7,11 @@ import java.util.Date;
 
 public class Data {
     //private Calendar calendar;
-    int dia;
-    int mes;
-    int ano;
-    int hora;
-    int minutos;
+    private int dia;
+    private int mes;
+    private int ano;
+    private int hora;
+    private int minutos;
 
     public Data(int dia, int mes, int ano) {
         this.dia = dia;

@@ -30,9 +30,9 @@ public class DadosAplicacao {
 
     //public JTable getResultado(int index){ return listaResultados.get(index); }
 
-    public int getIndiceResultado(JTable table){
-        return listaEventos.indexOf(table);
-    }
+    //public int getIndiceResultado(JTable table){
+        //return listaEventos.indexOf(table);
+    //}
 
     public ArrayList<Atleta> getListaAtletas() {
         return atletas;

@@ -17,7 +17,7 @@ public class ProvaDadosPreDefinidos {
     public ProvaDadosPreDefinidos(String nome, String categoria, String local, String tipoProva, Genero genero, String notas, Integer id) {
         //Esta verificação e para quando queremos criar uma provadadospredefinidos ou uma prova, para nao tar a mudar de id
         if(id == -1){
-            this.id = DadosAplicacao.INSTANCE.getSizeProvasPreDefinidos() + 1;
+            this.id = DadosAplicacao.INSTANCE.getSizeProvasPreDefinidas() + 1;
         }
         else{
             this.id = id;
