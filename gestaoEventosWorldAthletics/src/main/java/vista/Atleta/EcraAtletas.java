@@ -2,8 +2,6 @@ package vista.Atleta;
 
 import modelo.Atleta;
 import modelo.DadosAplicacao;
-import modelo.Evento;
-import vista.Evento.EcraCriarEditarEvento;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -27,7 +25,7 @@ public class EcraAtletas extends JFrame{
         btnCriarAtleta.addActionListener(this::btnCriarAtletaActionPerformed);
         btnSair.addActionListener(this::btnSairActionPerformed);
 
-        tabelaAtletas.addMouseListener(new MouseAdapter() {
+        /*tabelaAtletas.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
                     JTable target = (JTable)e.getSource();
@@ -43,7 +41,7 @@ public class EcraAtletas extends JFrame{
 
                 }
             }
-        });
+        });*/
 
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setContentPane(painelPrincipal);
@@ -53,7 +51,7 @@ public class EcraAtletas extends JFrame{
 
 
     private void btnCriarAtletaActionPerformed(ActionEvent actionEvent) {
-        new EcraCriarAtleta("Ecrã Criar Atleta").setVisible(true);
+        new EcraCriarAtleta().setVisible(true);
         preencherTabelaAtleta();
     }
 

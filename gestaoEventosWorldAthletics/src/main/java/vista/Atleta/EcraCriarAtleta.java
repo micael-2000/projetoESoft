@@ -5,7 +5,6 @@ import modelo.DadosAplicacao;
 import modelo.Data;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 
 public class EcraCriarAtleta extends JDialog{
@@ -19,7 +18,7 @@ public class EcraCriarAtleta extends JDialog{
     private JButton btnSair;
     private JComboBox comboBoxGenero;
 
-    public EcraCriarAtleta(String title){
+    public EcraCriarAtleta(){
 
         comboBoxGenero.setModel(new DefaultComboBoxModel(new String[]{"Masculino", "Feminino"}));
 

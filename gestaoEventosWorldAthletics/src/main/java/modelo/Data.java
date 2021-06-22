@@ -1,6 +1,9 @@
 package modelo;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 public class Data {
     private Calendar calendar;
@@ -45,8 +48,15 @@ public class Data {
     }
 
     public static Data parse(String raw){
-        //return new Data();
-        return null;
+
+        SimpleDateFormat fmt = new SimpleDateFormat("dd/MM/yyyy");
+        fmt.setLenient(false);
+        try {
+            Date parseDate = fmt.parse(raw);
+            return new Data(parseDate.getDay(), parseDate.getMonth(), parseDate.getYear());
+        } catch (ParseException e) {
+            return null;
+        }
     }
 
     public boolean isValida(){
