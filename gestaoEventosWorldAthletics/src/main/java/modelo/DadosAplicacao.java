@@ -13,6 +13,7 @@ public class DadosAplicacao {
     public static DadosAplicacao INSTANCE = new DadosAplicacao();
     private HashMap<Integer, ProvaDadosPreDefinidos> listaProvasDadosPreDefinidos;
     private ArrayList<Evento> listaEventos;
+    private ArrayList<Atleta> atletas;
     //private ArrayList<JTable> listaResultados;
     public DadosAplicacao() {
         //Provas pre definido
@@ -20,6 +21,7 @@ public class DadosAplicacao {
       //  listaResultados = new ArrayList<>();
         //Eventos
         listaEventos = new ArrayList<>();
+        atletas = new ArrayList<>();
     }
 
     public boolean existsProva(){
@@ -85,6 +87,14 @@ public class DadosAplicacao {
             return 0;
         }
         return listaProvasDadosPreDefinidos.size();
+    }
+
+    public ArrayList<Atleta> getListaAtletas() {
+        return atletas;
+    }
+
+    public void addAtleta(Atleta atleta){
+        atletas.add(atleta);
     }
 
 }
