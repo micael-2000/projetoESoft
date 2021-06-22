@@ -2,7 +2,6 @@ package vista.Prova;
 
 import com.opencsv.CSVWriter;
 import modelo.*;
-import vista.Evento.EcraCriarEditarEvento;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -45,7 +44,8 @@ public class EcraProvas extends JFrame{
 
                     //Detalhes / Editar prova
                     if(column == 1){
-                        new EcraCriarEditarDetalhesProva(DadosAplicacao.INSTANCE.getProvaDadosPreDefinidos(Integer.parseInt(tabelaProvasPreDefinidas.getValueAt(row, 0).toString())), "Detalhes");
+                        ProvaPreDefinida prova = DadosAplicacao.INSTANCE.getProvaPreDefinidas(Integer.parseInt(tabelaProvasPreDefinidas.getValueAt(row, 0).toString()));
+                        btnConsultarActionPerformed(prova);
                     }
                     //Eliminar prova
                     else if(column == 3){
@@ -54,7 +54,7 @@ public class EcraProvas extends JFrame{
                         int input = JOptionPane.showConfirmDialog(null, "Confirma a eliminação da Prova: " + tabelaProvasPreDefinidas.getValueAt(row, 1).toString());
 
                         if(input == 0){
-                            DadosAplicacao.INSTANCE.removeProvaDadosPreDefinidos(idProva);
+                            DadosAplicacao.INSTANCE.removeProvaPreDefinidas(idProva);
                             JOptionPane.showMessageDialog(null,"Prova eliminada com sucesso");
                             atualizarTabela();
                         }
@@ -75,16 +75,20 @@ public class EcraProvas extends JFrame{
         model = new DefaultTableModel(null, columnNames);
         tabelaProvasPreDefinidas.setModel(model);
 
-        for (ProvaDadosPreDefinidos provaDadosPreDefinidos: DadosAplicacao.INSTANCE.getListaProvasDadosPreDefinidos()) {
-            model.addRow(new Object[]{provaDadosPreDefinidos.getId(), provaDadosPreDefinidos.getNome(), provaDadosPreDefinidos.getCategoria(), "Eliminar"});
+        for (ProvaPreDefinida provaPreDefinida : DadosAplicacao.INSTANCE.getListaProvasPreDefinidas()) {
+            model.addRow(new Object[]{provaPreDefinida.getId(), provaPreDefinida.getNome(), provaPreDefinida.getCategoria(), "Eliminar"});
         }
     }
 
-    private void btnCriarProvaActionPerformed(ActionEvent e) {
+    public void btnCriarProvaActionPerformed(ActionEvent e) {
         new EcraCriarEditarDetalhesProva(null, "Criar");
     }
 
-    private void btnImportarProvasActionPerformed(ActionEvent e) {
+    private void mostrarErro(String mensagem ){
+        JOptionPane.showConfirmDialog(null, mensagem, "Erro", JOptionPane.DEFAULT_OPTION);
+    }
+
+    public void btnImportarProvasActionPerformed(ActionEvent e) {
         String delimiter = ";";
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Selecione o ficheiro");
@@ -93,32 +97,39 @@ public class EcraProvas extends JFrame{
 
         if (userSelection == JFileChooser.APPROVE_OPTION) {
             File fileToSave = fileChooser.getSelectedFile();
-            try {
-                File file = new File(fileToSave.getAbsolutePath());
-                FileReader fr = new FileReader(file);
-                BufferedReader br = new BufferedReader(fr);
-                String line = "";
-                String[] tempArr;
+            String extension = fileToSave.getAbsolutePath().substring(fileToSave.getAbsolutePath().lastIndexOf(".") + 1, fileToSave.getAbsolutePath().length());
+            if (!extension.equals("csv")){
+                mostrarErro("O formato nao corresponde a *.csv");
+            }
+            else{
+                try {
+                    File file = new File(fileToSave.getAbsolutePath());
+                    FileReader fr = new FileReader(file);
+                    BufferedReader br = new BufferedReader(fr);
+                    String line = "";
+                    String[] tempArr;
 
-                while((line = br.readLine()) != null){
-                    tempArr = line.split(delimiter);
+                    while((line = br.readLine()) != null){
+                        tempArr = line.split(delimiter);
 
-                    if(tempArr.length != 6 && tempArr.length != 5){
-                        //mostrar erro
+                        if(tempArr.length != 6 && tempArr.length != 5){
+                            mostrarErro("A quantidade de campos para a prova é diferente de 5 e 6");
+                        }
+                        else{
+                            //String nome, String categoria, String local, String tipoProva, String genero, String notas
+                            ProvaPreDefinida prova = new ProvaPreDefinida(tempArr[0], tempArr[1], tempArr[2], tempArr[3], Genero.valueOf(tempArr[4]), tempArr[5], -1);
+                            DadosAplicacao.INSTANCE.addProvaPreDefinida(prova);
+                        }
                     }
-                    else{
-                        //String nome, String categoria, String local, String tipoProva, String genero, String notas
-                        ProvaDadosPreDefinidos prova = new ProvaDadosPreDefinidos(tempArr[0], tempArr[1], tempArr[2], tempArr[3], Genero.valueOf(tempArr[4]), tempArr[5], -1);
-                        DadosAplicacao.INSTANCE.addProva(prova);
-                    }
+
+                    br.close();
+                } catch (IOException ioe) {
+                    ioe.printStackTrace();
                 }
-
-                br.close();
-            } catch (IOException ioe) {
-                ioe.printStackTrace();
             }
         }
         atualizarTabela();
+        JOptionPane.showMessageDialog(this,"Provas adicionadas com sucesso");
     }
 
     public void btnExportarProvasActionPerformed(ActionEvent e) {
@@ -127,8 +138,6 @@ public class EcraProvas extends JFrame{
         int userSelection = fileChooser.showSaveDialog(this);
 
         if (userSelection == JFileChooser.APPROVE_OPTION) {
-            //https://www.geeksforgeeks.org/reading-csv-file-java-using-opencsv/
-
             File file = new File(fileChooser.getSelectedFile().getAbsolutePath()+".csv");
 
             try {
@@ -136,7 +145,7 @@ public class EcraProvas extends JFrame{
 
                 CSVWriter writer = new CSVWriter(outputfile, ';', CSVWriter.NO_QUOTE_CHARACTER,  CSVWriter.DEFAULT_ESCAPE_CHARACTER, CSVWriter.DEFAULT_LINE_END);
 
-                for (ProvaDadosPreDefinidos prova : DadosAplicacao.INSTANCE.getListaProvasDadosPreDefinidos()) {
+                for (ProvaPreDefinida prova : DadosAplicacao.INSTANCE.getListaProvasPreDefinidas()) {
                     //String nome, String categoria, String local, String tipoProva, String genero, String notas
                     String[] data = {prova.getNome(), prova.getCategoria(), prova.getLocal(), prova.getTipoProva(), prova.getGenero().toString(), prova.getNotas()};
                     writer.writeNext(data);
@@ -151,5 +160,9 @@ public class EcraProvas extends JFrame{
 
     public void btnVoltarActionPerformed(ActionEvent e){
         setVisible(false);
+    }
+
+    public void btnConsultarActionPerformed(ProvaPreDefinida prova){
+        new EcraCriarEditarDetalhesProva(prova, "Detalhes");
     }
 }

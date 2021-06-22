@@ -2,7 +2,7 @@ package vista.Prova;
 
 import modelo.DadosAplicacao;
 import modelo.Genero;
-import modelo.ProvaDadosPreDefinidos;
+import modelo.ProvaPreDefinida;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -28,14 +28,14 @@ public class EcraCriarEditarDetalhesProva extends JDialog{
     private JLabel notasLabel;
     private JLabel eventosEmQueDecorreuLabel;
 
-    public EcraCriarEditarDetalhesProva(ProvaDadosPreDefinidos prova, String tipoEcra){
+    public EcraCriarEditarDetalhesProva(ProvaPreDefinida prova, String tipoEcra){
         genero.addItem(Genero.MASCULINO);
         genero.addItem(Genero.FEMININO);
 
         //Criar Prova
         if(tipoEcra.equals("Criar")){
             this.tipoEcra.setText("Criar");
-            id.setText(Integer.toString(DadosAplicacao.INSTANCE.getSizeProvasPreDefinidos() + 1));
+            id.setText(Integer.toString(DadosAplicacao.INSTANCE.getSizeProvasPreDefinidas() + 1));
             editarButton.setVisible(false);
             recordesEventosVisibilidade(false);
         }
@@ -56,7 +56,7 @@ public class EcraCriarEditarDetalhesProva extends JDialog{
         setVisible(true);
     }
 
-    private void carregarDados(ProvaDadosPreDefinidos prova){
+    private void carregarDados(ProvaPreDefinida prova){
         id.setText(Integer.toString(prova.getId()));
         nome.setText(prova.getNome());
         genero.setSelectedItem(prova.getGenero());
@@ -103,31 +103,35 @@ public class EcraCriarEditarDetalhesProva extends JDialog{
       getParent().setVisible(true);
     }
 
+    private void mostrarErro(String mensagem ){
+        JOptionPane.showConfirmDialog(null, mensagem, "Erro", JOptionPane.DEFAULT_OPTION);
+    }
+
     private void btnGuardarActionPerformed(ActionEvent e) {
-        ProvaDadosPreDefinidos prova = null;
+        ProvaPreDefinida prova = null;
         if(nome.getText().isEmpty()){
-            // mostrar erro
+            mostrarErro("O campo \"Nome\" é obrigatório");
         }
         else{
             if (categoria.getText().isEmpty()) {
-                // mostrar erro
+                mostrarErro("O campo \"Categoria\" é obrigatório");
             } else {
                 if(local.getText().isEmpty()){
-                    // mostrar erro
+                    mostrarErro("O campo \"Local\" é obrigatório");
                 }
                 else{
                     if(tipoProva.getText().isEmpty()){
-                        // mostrar erro
+                        mostrarErro("O campo \"Tipo Prova\" é obrigatório");
                     }
                     else{
                         if(tipoEcra.getText().equals("Criar")){
-                            prova = new ProvaDadosPreDefinidos(nome.getText(), categoria.getText(), local.getText(), tipoProva.getText(), Genero.valueOf(genero.getSelectedItem().toString()), notas.getText(), -1);
-                            DadosAplicacao.INSTANCE.addProva(prova);
+                            prova = new ProvaPreDefinida(nome.getText(), categoria.getText(), local.getText(), tipoProva.getText(), Genero.valueOf(genero.getSelectedItem().toString()), notas.getText(), -1);
+                            DadosAplicacao.INSTANCE.addProvaPreDefinida(prova);
 
                             JOptionPane.showMessageDialog(this,"Foi criado a Prova");
                             recordesEventosVisibilidade(true);
                         } else if(tipoEcra.getText().equals("Editar")){
-                            prova = DadosAplicacao.INSTANCE.getProvaDadosPreDefinidos(Integer.parseInt(id.getText()));
+                            prova = DadosAplicacao.INSTANCE.getProvaPreDefinidas(Integer.parseInt(id.getText()));
                             prova.setNome(nome.getText());
                             prova.setNotas(notas.getText());
                             prova.setLocal(local.getText());

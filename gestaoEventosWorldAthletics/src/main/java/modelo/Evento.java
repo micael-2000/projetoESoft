@@ -28,7 +28,6 @@ public class Evento {
         for (Prova prova : listaProvas) {
             arrayIds.add(prova.getId());
         }
-        System.out.println(arrayIds.toString());
         return arrayIds;
     }
 

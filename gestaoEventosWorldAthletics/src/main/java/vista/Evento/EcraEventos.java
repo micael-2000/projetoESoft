@@ -14,6 +14,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.*;
+import java.util.ArrayList;
 
 public class EcraEventos extends JFrame{
     private JPanel painelEventos;
@@ -85,12 +86,16 @@ public class EcraEventos extends JFrame{
         }
     }
 
-    private void btnCriarEventoActionPerformed(ActionEvent e) {
+    private void mostrarErro(String mensagem ){
+        JOptionPane.showConfirmDialog(null, mensagem, "Erro", JOptionPane.DEFAULT_OPTION);
+    }
+
+    public void btnCriarEventoActionPerformed(ActionEvent e) {
         setVisible(false);
         new EcraCriarEditarEvento(false);
     }
 
-    private void btnImportarEventoActionPerformed(ActionEvent e) {
+    public void btnImportarEventoActionPerformed(ActionEvent e) {
         String delimiter = ";";
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Selecione o ficheiro");
@@ -99,44 +104,51 @@ public class EcraEventos extends JFrame{
 
         if (userSelection == JFileChooser.APPROVE_OPTION) {
             File fileToSave = fileChooser.getSelectedFile();
-            try {
-                File file = new File(fileToSave.getAbsolutePath());
-                FileReader fr = new FileReader(file);
-                BufferedReader br = new BufferedReader(fr);
-                String line = "";
-                String[] tempArr;
 
-                line = br.readLine();
-                tempArr = line.split(delimiter);
+            String extension = fileToSave.getAbsolutePath().substring(fileToSave.getAbsolutePath().lastIndexOf(".") + 1, fileToSave.getAbsolutePath().length());
+            if (!extension.equals("csv")){
+                mostrarErro("O formato nao corresponde a *.csv");
+            }
+            else{
+                try {
+                    File file = new File(fileToSave.getAbsolutePath());
+                    FileReader fr = new FileReader(file);
+                    BufferedReader br = new BufferedReader(fr);
+                    String line = "";
+                    String[] tempArr;
 
-                if(tempArr.length != 5){
-                    //mostrar erro
-                }
-                else{
-                    //DataInicio
-                    Data dataInicio = Data.parse(tempArr[0]);
-                    if(dataInicio.isValida() == false){
-                        //mostrar erro
-                    }else{
-                        //DataFim
-                        Data dataFim = Data.parse(tempArr[1]);
-                        if(dataFim.isValida() == false){
-                            //mostrar erro
-                        }
-                        else{
-                            //tempArr[2] - nomeEvento
-                            //tempArr[3] - local
-                            //tempArr[4] - pais
-                            Evento evento = new Evento(null, dataInicio, dataFim, tempArr[2], tempArr[3], tempArr[4]);
-                            DadosAplicacao.INSTANCE.addEvento(evento);
-                            new EcraCriarEditarEvento(evento);
+                    line = br.readLine();
+                    tempArr = line.split(delimiter);
+
+                    if(tempArr.length != 5){
+                        mostrarErro( "A quantidade de campos para o evento é diferente de 5");
+                    }
+                    else{
+                        //DataInicio
+                        Data dataInicio = Data.parse(tempArr[0]);
+                        if(dataInicio.isValida() == false){
+                            mostrarErro( "A data não é válida");
+                        }else{
+                            //DataFim
+                            Data dataFim = Data.parse(tempArr[1]);
+                            if(dataFim.isValida() == false){
+                                mostrarErro( "A data não é válida");
+                            }
+                            else{
+                                //tempArr[2] - nomeEvento
+                                //tempArr[3] - local
+                                //tempArr[4] - pais
+                                Evento evento = new Evento(new ArrayList<>(), dataInicio, dataFim, tempArr[2], tempArr[3], tempArr[4]);
+                                DadosAplicacao.INSTANCE.addEvento(evento);
+                                new EcraCriarEditarEvento(evento);
+                            }
                         }
                     }
-                }
 
-                br.close();
-            } catch (IOException ioe) {
-                ioe.printStackTrace();
+                    br.close();
+                } catch (IOException ioe) {
+                    ioe.printStackTrace();
+                }
             }
         }
     }

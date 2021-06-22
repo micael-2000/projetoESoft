@@ -52,11 +52,11 @@ public class EcraPrincipal extends JFrame{
         new DadosAplicacao();
 
         ArrayList<Prova> provas = new ArrayList<>();
-        ProvaDadosPreDefinidos prova = new ProvaDadosPreDefinidos("Prova1", "Corrida", "Pista exterior", "Eliminatórias", Genero.FEMININO, " ", -1);
-        DadosAplicacao.INSTANCE.addProva(prova);
+        ProvaPreDefinida prova = new ProvaPreDefinida("Prova1", "Corrida", "Pista exterior", "Eliminatórias", Genero.FEMININO, " ", -1);
+        DadosAplicacao.INSTANCE.addProvaPreDefinida(prova);
         provas.add(new Prova(prova));
-        prova = new ProvaDadosPreDefinidos("Prova2", "Corrida", "Pista exterior", "Eliminatórias", Genero.MASCULINO, " ", -1);
-        DadosAplicacao.INSTANCE.addProva(prova);
+        prova = new ProvaPreDefinida("Prova2", "Corrida", "Pista exterior", "Eliminatórias", Genero.MASCULINO, " ", -1);
+        DadosAplicacao.INSTANCE.addProvaPreDefinida(prova);
         provas.add(new Prova(prova));
 
         DadosAplicacao.INSTANCE.addEvento(new Evento(provas, new Data(10,10,2010), new Data(20,10,2010), "Lisboa", "Portugal", "Evento teste"));

@@ -7,7 +7,6 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public class EcraCriarEditarEvento extends JDialog {
     private JTextField nomeEvento;
@@ -77,7 +76,7 @@ public class EcraCriarEditarEvento extends JDialog {
         JOptionPane.showConfirmDialog(null, mensagem, "Erro", JOptionPane.DEFAULT_OPTION);
     }
 
-    private void adicionarProvasNasListas(Evento evento) {
+    public void adicionarProvasNasListas(Evento evento) {
         modelProvasDisponives = new DefaultListModel<String>();
         listaProvasDisponiveis.setModel(modelProvasDisponives);
         modelProvasEvento = new DefaultListModel<String>();
@@ -90,7 +89,7 @@ public class EcraCriarEditarEvento extends JDialog {
         }
 
         //adiciona elementos a lista de provas disponiveis porque e a criacao do evento
-        for (ProvaDadosPreDefinidos prova : DadosAplicacao.INSTANCE.getListaProvasDadosPreDefinidos()) {
+        for (ProvaPreDefinida prova : DadosAplicacao.INSTANCE.getListaProvasPreDefinidas()) {
             if (arrayIds != null && arrayIds.contains(prova.getId())) {
                 modelProvasEvento.addElement(prova.getId() + " - " + prova.getNome());
             } else {
@@ -99,7 +98,7 @@ public class EcraCriarEditarEvento extends JDialog {
         }
     }
 
-    private void btnGuardarActionPerformed(ActionEvent e) {
+    public void btnGuardarActionPerformed(ActionEvent e) {
         if(nomeEvento.getText().isEmpty()){
             mostrarErro("O campo \"Nome do Evento\" é obrigatório");
         }
@@ -142,7 +141,7 @@ public class EcraCriarEditarEvento extends JDialog {
                                                 if(modelProvasEvento.getElementAt(i) != null){
                                                     String[] tempArr = modelProvasEvento.getElementAt(i).split(" ");
                                                     int idProva = Integer.parseInt(tempArr[0]);
-                                                    ProvaDadosPreDefinidos prova = DadosAplicacao.INSTANCE.getProvaDadosPreDefinidos(idProva);
+                                                    ProvaPreDefinida prova = DadosAplicacao.INSTANCE.getProvaPreDefinidas(idProva);
                                                     listaProvasDoEvento.add(new Prova(prova));
                                                 }
                                             }
@@ -176,7 +175,7 @@ public class EcraCriarEditarEvento extends JDialog {
         }
     }
 
-    private void btnCancelarActionPerformed(ActionEvent e){
+    public void btnCancelarActionPerformed(ActionEvent e){
         setVisible(false);
         new EcraEventos();
     }
