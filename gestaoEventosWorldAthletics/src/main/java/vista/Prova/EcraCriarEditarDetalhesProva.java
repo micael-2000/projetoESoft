@@ -56,7 +56,7 @@ public class EcraCriarEditarDetalhesProva extends JDialog{
         setVisible(true);
     }
 
-    public void carregarDados(ProvaDadosPreDefinidos prova){
+    private void carregarDados(ProvaDadosPreDefinidos prova){
         id.setText(Integer.toString(prova.getId()));
         nome.setText(prova.getNome());
         genero.setSelectedItem(prova.getGenero());
