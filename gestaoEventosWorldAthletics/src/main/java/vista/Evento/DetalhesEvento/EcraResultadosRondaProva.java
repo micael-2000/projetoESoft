@@ -9,7 +9,7 @@ import java.io.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class EcraResultadosRondaEvento  extends JDialog {
+public class EcraResultadosRondaProva extends JDialog {
 
     private JButton voltarButton;
     private JButton atualizarResultadosButton;
@@ -21,7 +21,7 @@ public class EcraResultadosRondaEvento  extends JDialog {
     private JPanel painelTabela;
     private JScrollPane jsp;
 
-    public EcraResultadosRondaEvento(Evento evento, Prova prova){
+    public EcraResultadosRondaProva(Evento evento, Prova prova){
 
         nomeRonda.setText(prova.getNome());
         nomeEvento.setText(evento.getNomeEvento());

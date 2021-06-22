@@ -36,7 +36,7 @@ public class EcraProgramaEvento extends JDialog{
 
         ArrayList<Prova> provas = evento.getListaProvas();
 
-        criarTabelasRondas(provas, painelTabelas);
+        criarTabelasRondas(provas);
 
 
         voltarButton.addActionListener(this::btnVoltarActionPerformed);
@@ -54,7 +54,7 @@ public class EcraProgramaEvento extends JDialog{
         setVisible(true);
     }
 
-    public void criarTabelasRondas(ArrayList<Prova> provas, JPanel zone){
+    public void criarTabelasRondas(ArrayList<Prova> provas){
 
         String[][] rows = new String[4][9];
         //prova = new ProvaDadosPreDefinidos("Prova2", "Corrida", "Pista exterior", "Eliminatórias", Genero.MASCULINO, " ", -1);
@@ -83,7 +83,7 @@ public class EcraProgramaEvento extends JDialog{
 
         JScrollPane sp = new JScrollPane(tableProvasPorDia);
 
-        zone.add(sp);
+        painelDias.add(sp);
 
         tableProvasPorDia.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
@@ -98,7 +98,7 @@ public class EcraProgramaEvento extends JDialog{
                     }
                     //Resultados
                     if(column == 7){
-                        btnResultadosRondaEventoActionPerformed(evento.getListaProvas().get(row));
+                        btnResultadosRondaProvaActionPerformed(evento.getListaProvas().get(row));
                     }
                     //Progresso
                     else if(column == 8){
@@ -115,9 +115,9 @@ public class EcraProgramaEvento extends JDialog{
         new EcraInscritosEvento(evento, prova);
     }
 
-    private void btnResultadosRondaEventoActionPerformed(Prova prova){
+    private void btnResultadosRondaProvaActionPerformed(Prova prova){
 
-        new EcraResultadosRondaEvento(evento, prova);
+        new EcraResultadosRondaProva(evento, prova);
     }
 
     private void btnAcompanharProvaEventoActionPerformed(Prova prova){
@@ -169,5 +169,11 @@ public class EcraProgramaEvento extends JDialog{
         }
 
     }
+
+    public void filtrarGenero(){
+        return;
+    }
+
+
 
 }

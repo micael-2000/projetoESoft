@@ -3,7 +3,7 @@ package modelo;
 import java.util.Calendar;
 
 public class Data {
-    private Calendar calendar;
+    //private Calendar calendar;
     int dia;
     int mes;
     int ano;
