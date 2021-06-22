@@ -9,7 +9,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import java.awt.event.ActionEvent;
 
-public class EcraEventoVendedores extends JFrame{
+public class EcraEventoVencedores extends JFrame{
     private JPanel painelVencedores;
     private JButton voltarButton;
     private JButton programaButton;
@@ -20,7 +20,7 @@ public class EcraEventoVendedores extends JFrame{
     private DefaultTableModel model;
     private Evento evento;
 
-    public EcraEventoVendedores(Evento evento){
+    public EcraEventoVencedores(Evento evento){
         this.evento = evento;
         nomeEvento.setText(evento.getNomeEvento());
 

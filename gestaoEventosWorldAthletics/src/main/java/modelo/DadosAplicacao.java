@@ -2,6 +2,7 @@ package modelo;
 
 import javafx.util.Pair;
 
+import javax.swing.*;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -12,11 +13,11 @@ public class DadosAplicacao {
     public static DadosAplicacao INSTANCE = new DadosAplicacao();
     private HashMap<Integer, ProvaDadosPreDefinidos> listaProvasDadosPreDefinidos;
     private ArrayList<Evento> listaEventos;
-
+    //private ArrayList<JTable> listaResultados;
     public DadosAplicacao() {
         //Provas pre definido
         listaProvasDadosPreDefinidos = new HashMap<>(30);
-
+      //  listaResultados = new ArrayList<>();
         //Eventos
         listaEventos = new ArrayList<>();
     }
@@ -29,6 +30,8 @@ public class DadosAplicacao {
         listaEventos.add(evento);
     }
 
+    //public void addResultado(JTable tabelaResultado){ listaResultados.add(tabelaResultado); }
+
     public void addProva(ProvaDadosPreDefinidos prova){
         listaProvasDadosPreDefinidos.put(prova.getId(), prova);
     }
@@ -37,13 +40,21 @@ public class DadosAplicacao {
         listaEventos.remove(posicao);
     }
 
+    //public void removeResultado(int posicao){
+        //listaResultados.remove(posicao);
+    //}
+
     public ArrayList<Evento> getListaEventos() {
         return listaEventos;
     }
 
+    //public ArrayList<JTable> getListaResultados(){ return listaResultados; }
+
     public Evento getEvento(int index) {
         return listaEventos.get(index);
     }
+
+    //public JTable getResultado(int index){ return listaResultados.get(index); }
 
     public int getSizeEventos(){
         return listaEventos.size();
@@ -51,6 +62,10 @@ public class DadosAplicacao {
 
     public int getIndiceEvento(Evento evento){
         return listaEventos.indexOf(evento);
+    }
+
+    public int getIndiceResultado(JTable table){
+        return listaEventos.indexOf(table);
     }
 
     public Collection<ProvaDadosPreDefinidos> getListaProvasDadosPreDefinidos() {

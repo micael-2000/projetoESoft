@@ -51,8 +51,8 @@ public class EcraPrincipal extends JFrame{
         DadosAplicacao.INSTANCE.addProva(prova);
         provas.add(new Prova(prova));
 
-        DadosAplicacao.INSTANCE.addEvento(new Evento(provas, new Data(), new Data(), "Lisboa", "Portugal", "Evento teste"));
-        DadosAplicacao.INSTANCE.addEvento(new Evento(provas, new Data(), new Data(), "Marinha", "Antártida", "Evento teste 2"));
+        DadosAplicacao.INSTANCE.addEvento(new Evento(provas, new Data(10,10,2010), new Data(20,10,2010), "Lisboa", "Portugal", "Evento teste"));
+        DadosAplicacao.INSTANCE.addEvento(new Evento(provas, new Data(20,10,2011), new Data(30,10,2011), "Marinha", "Antártida", "Evento teste 2"));
 
         new EcraPrincipal("Gestao Eventos").setVisible(true);
     }

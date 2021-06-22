@@ -68,6 +68,6 @@ public class EcraEventoMedalhas extends JFrame{
 
     public void btnVencedoresActionPeformed(ActionEvent e) {
         setVisible(false);
-        new EcraEventoVendedores(evento);
+        new EcraEventoVencedores(evento);
     }
 }
