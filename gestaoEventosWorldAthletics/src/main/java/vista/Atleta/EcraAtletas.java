@@ -16,16 +16,19 @@ public class EcraAtletas extends JFrame{
     private JButton btnSuspenderAtleta;
     private JButton btnCriarAtleta;
     private JButton btnSair;
+    private JScrollPane scrollPaneTabelaAtletas;
 
     public EcraAtletas(String title){
         super(title);
 
-        this.preencherTabelaAtleta();
-
         btnCriarAtleta.addActionListener(this::btnCriarAtletaActionPerformed);
         btnSair.addActionListener(this::btnSairActionPerformed);
 
-        /*tabelaAtletas.addMouseListener(new MouseAdapter() {
+        //bloqueia o user de editar as celulas
+        tabelaAtletas.setDefaultEditor(Object.class, null);
+        scrollPaneTabelaAtletas.setViewportView(tabelaAtletas);
+
+        tabelaAtletas.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
                     JTable target = (JTable)e.getSource();
@@ -34,32 +37,48 @@ public class EcraAtletas extends JFrame{
 
                     //eliminar atleta
                     if(column == 5){
-                        System.out.println("Eliminar");
+                        btnEliminarActionPerformed(row);
                     }else{
-                        System.out.println("Na linha");
+                        doubleClickJTableRowPerformed(row);
                     }
 
                 }
             }
-        });*/
+        });
 
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        this.preencherTabelaAtletas();
+
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setContentPane(painelPrincipal);
         pack();
     }
 
 
-
     private void btnCriarAtletaActionPerformed(ActionEvent actionEvent) {
         new EcraCriarAtleta().setVisible(true);
-        preencherTabelaAtleta();
+        preencherTabelaAtletas();
     }
 
     private void btnSairActionPerformed(ActionEvent actionEvent) {
         this.setVisible(false);
     }
 
-    private void preencherTabelaAtleta() {
+    private void btnEliminarActionPerformed(int row) {
+        int input = JOptionPane.showConfirmDialog(null, "Tem a certaza que deseja remover o Atleta?",null,JOptionPane.YES_NO_OPTION);
+        if (input == JOptionPane.YES_OPTION){
+            DadosAplicacao.INSTANCE.removeAtleta(row);
+            preencherTabelaAtletas();
+            return;
+        }
+        return;
+    }
+
+    private void doubleClickJTableRowPerformed(int row) {
+        new EcraDetalhes(DadosAplicacao.INSTANCE.getAtleta(row)).setVisible(true);
+        preencherTabelaAtletas();
+    }
+
+    private void preencherTabelaAtletas() {
         Object columnNames[] = {"Nome", "País", "Género", "Data de nascimento", "Contacto", "Eliminar"};
 
         DefaultTableModel model = new DefaultTableModel(null, columnNames);

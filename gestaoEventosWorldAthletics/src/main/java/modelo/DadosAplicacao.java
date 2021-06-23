@@ -1,6 +1,5 @@
 package modelo;
 
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -9,7 +8,8 @@ public class DadosAplicacao {
     public static DadosAplicacao INSTANCE = new DadosAplicacao();
     private HashMap<Integer, ProvaPreDefinida> listaProvasPreDefinidas;
     private ArrayList<Evento> listaEventos;
-    private ArrayList<Atleta> atletas;
+    private ArrayList<Atleta> listaAtletas;
+    private ArrayList<Inscricao> listaInscricoes;
     //private ArrayList<JTable> listaResultados;
     public DadosAplicacao() {
         //Provas pre definido
@@ -17,7 +17,8 @@ public class DadosAplicacao {
       //  listaResultados = new ArrayList<>();
         //Eventos
         listaEventos = new ArrayList<>();
-        atletas = new ArrayList<>();
+        listaAtletas = new ArrayList<>();
+        listaInscricoes = new ArrayList<>();
     }
 
     //public void addResultado(JTable tabelaResultado){ listaResultados.add(tabelaResultado); }
@@ -34,13 +35,9 @@ public class DadosAplicacao {
         //return listaEventos.indexOf(table);
     //}
 
-    public ArrayList<Atleta> getListaAtletas() {
-        return atletas;
-    }
 
-    public void addAtleta(Atleta atleta){
-        atletas.add(atleta);
-    }
+
+
 
 
     //Evento
@@ -83,8 +80,36 @@ public class DadosAplicacao {
         }
         return listaProvasPreDefinidas.size();
     }
-
     public void addProvaPreDefinida(ProvaPreDefinida prova){
         listaProvasPreDefinidas.put(prova.getId(), prova);
+    }
+
+
+    //Atletas
+    public ArrayList<Atleta> getListaAtletas() {
+        return listaAtletas;
+    }
+
+    public void addAtleta(Atleta atleta){
+        listaAtletas.add(atleta);
+    }
+
+    public void removeAtleta(int posicao) {
+        listaAtletas.remove(posicao);
+    }
+
+    public Atleta getAtleta(int index) {
+        return listaAtletas.get(index);
+    }
+
+    //Inscricoes
+    public ArrayList<Inscricao> getListaInscricoes() {
+        return listaInscricoes;
+    }
+
+    public void addInscricao(Inscricao inscricao){listaInscricoes.add(inscricao);}
+
+    public void removeInscricao(int posicao) {
+            listaInscricoes.remove(posicao);
     }
 }

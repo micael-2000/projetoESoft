@@ -2,6 +2,7 @@ package vista;
 
 import modelo.*;
 import vista.Atleta.EcraAtletas;
+import vista.Atleta.EcraInscricoes;
 import vista.Evento.EcraEventos;
 import vista.Prova.EcraProvas;
 
@@ -24,11 +25,13 @@ public class EcraPrincipal extends JFrame{
         eventosButton.addActionListener(this::btnEventosActionPerformed);
         provasButton.addActionListener(this::btnProvasActionPerformed);
         atletasButton.addActionListener(this::btnAtletasActionPerformed);
+        inscriçõesButton.addActionListener(this::btnInscricoesActionPerformed);
 
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setContentPane(painelPrincipal);
         pack();
     }
+
 
 
     private void btnSairActionPerformed(ActionEvent e) {
@@ -46,6 +49,10 @@ public class EcraPrincipal extends JFrame{
     private void btnAtletasActionPerformed(ActionEvent actionEvent) {
         new EcraAtletas("Ecrã Atletas").setVisible(true);
     }
+    private void btnInscricoesActionPerformed(ActionEvent actionEvent) {
+        new EcraInscricoes("Ecrã Inscrições").setVisible(true);
+    }
+
 
 
     public static void main(String[] args) {

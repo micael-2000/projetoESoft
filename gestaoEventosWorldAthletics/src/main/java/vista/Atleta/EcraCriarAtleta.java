@@ -26,7 +26,7 @@ public class EcraCriarAtleta extends JDialog{
         btnSair.addActionListener(this::btnSairActionPerformed);
 
         setModal(true);
-        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setContentPane(painelPrincipal);
         pack();
     }

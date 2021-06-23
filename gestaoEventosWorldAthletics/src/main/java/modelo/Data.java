@@ -4,6 +4,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
 public class Data {
     //private Calendar calendar;
@@ -52,8 +54,16 @@ public class Data {
         SimpleDateFormat fmt = new SimpleDateFormat("dd/MM/yyyy");
         fmt.setLenient(false);
         try {
+
             Date parseDate = fmt.parse(raw);
-            return new Data(parseDate.getDay(), parseDate.getMonth(), parseDate.getYear());
+            Calendar calendar = new GregorianCalendar();
+            calendar.setTime(parseDate);
+
+            /*System.out.println("Dia:" + calendar.get(Calendar.DAY_OF_MONTH));
+            System.out.println("Mes:" + calendar.get(Calendar.MONTH) + 1);
+            System.out.println("Ano:" + calendar.get(Calendar.YEAR));*/
+
+            return new Data(calendar.get(Calendar.DAY_OF_MONTH), calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.YEAR));
         } catch (ParseException e) {
             return null;
         }
