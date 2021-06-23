@@ -17,6 +17,8 @@ public class EcraCriarAtleta extends JDialog{
     private JButton btnCriar;
     private JButton btnSair;
     private JComboBox comboBoxGenero;
+    private JTextField txtNumeroAtleta;
+    private JLabel lblNumeroAtleta;
 
     public EcraCriarAtleta(){
 
@@ -91,7 +93,31 @@ public class EcraCriarAtleta extends JDialog{
             return;
         }
 
-        Atleta atleta = new Atleta(nome,pais,genero,contacto,data);
+        String numeroAtleta = txtNumeroAtleta.getText();
+        if(numeroAtleta.equals("")){
+            mostrarErro(11);
+            return;
+        }
+
+        int numeroAtletaInt;
+        try {
+            numeroAtletaInt =  Integer.parseInt(numeroAtleta);
+        }catch (NumberFormatException e){
+            numeroAtletaInt = -1;
+        }
+        if( numeroAtletaInt < 1){
+            mostrarErro(12);
+            return;
+        }
+
+        for(Atleta atleta : DadosAplicacao.INSTANCE.getListaAtletas()){
+           if (numeroAtletaInt == atleta.getNumeroAtleta()){
+               mostrarErro(13);
+               return;
+           }
+        }
+
+        Atleta atleta = new Atleta(numeroAtletaInt,nome,pais,genero,contacto,data);
         DadosAplicacao.INSTANCE.addAtleta(atleta);
         setVisible(false);
 
@@ -134,7 +160,19 @@ public class EcraCriarAtleta extends JDialog{
             case 10 :
                 JOptionPane.showMessageDialog(null, "O contatcto é inválido");
                 break;
+            case 11:
+                JOptionPane.showMessageDialog(null, "O numero de atleta é mandatório");
+                break;
+            case 12:
+                JOptionPane.showMessageDialog(null, "O numero de atleta é inválido");
+                break;
+            case 13:
+                JOptionPane.showMessageDialog(null, "O numero de atleta já existe");
+                break;
         }
     }
 
+    private void createUIComponents() {
+        // TODO: place custom component creation code here
+    }
 }

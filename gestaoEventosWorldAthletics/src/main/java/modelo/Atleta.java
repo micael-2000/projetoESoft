@@ -1,13 +1,15 @@
 package modelo;
 
 public class Atleta {
+    private int numeroAtleta = 0;
     private String nome;
     private String pais;
     private String genero;
     private int contacto;
     private Data dataNascimento;
 
-    public Atleta(String nome, String pais, String genero, int contacto, Data dataNascimento) {
+    public Atleta(int numeroAtleta,String nome, String pais, String genero, int contacto, Data dataNascimento) {
+        this.numeroAtleta = numeroAtleta;
         this.nome = nome;
         this.pais = pais;
         this.genero = genero;
@@ -53,5 +55,9 @@ public class Atleta {
 
     public void setDataNascimento(Data dataNascimento) {
         this.dataNascimento = dataNascimento;
+    }
+
+    public int getNumeroAtleta() {
+        return numeroAtleta;
     }
 }

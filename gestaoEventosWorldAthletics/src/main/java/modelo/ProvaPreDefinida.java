@@ -13,8 +13,9 @@ public class ProvaPreDefinida {
     private String recordesMundialAtual;
     private String recordistas;
     private ArrayList<String> eventosEmQueDecorreu;
+    private double marcaMinima;
 
-    public ProvaPreDefinida(String nome, String categoria, String local, String tipoProva, Genero genero, String notas, Integer id) {
+    public ProvaPreDefinida(String nome, String categoria, String local, String tipoProva, Genero genero, String notas, Integer id, double marcaMinima) {
         //Esta verificação e para quando queremos criar uma provadadospredefinidos ou uma prova, para nao tar a mudar de id
         if(id == -1){
             this.id = DadosAplicacao.INSTANCE.getSizeProvasPreDefinidas() + 1;
@@ -31,6 +32,7 @@ public class ProvaPreDefinida {
         recordesMundialAtual = null;
         recordistas = null;
         eventosEmQueDecorreu = new ArrayList<>();
+        this.marcaMinima = marcaMinima;
     }
 
     public int getId() {
@@ -97,6 +99,10 @@ public class ProvaPreDefinida {
         return recordistas;
     }
 
+    public double getMarcaMinima() {
+        return marcaMinima;
+    }
+
     public void setRecordistas(String recordistas) {
         this.recordistas = recordistas;
     }
@@ -120,4 +126,6 @@ public class ProvaPreDefinida {
 
         return eventosEmQueDecorreu;
     }
+
+
 }

@@ -3,13 +3,14 @@ package modelo;
 public class Inscricao {
 
     private Atleta atleta;
-    private String nomeProva;
-    private float marcaAlcancada;
+    private Prova prova;
+    private double marcaAlcancada;
     private String pais;
     private boolean isValida;
 
-    public Inscricao(String nomeProva, float marcaAlcancada, String pais) {
-        this.nomeProva = nomeProva;
+    public Inscricao(Atleta atleta, Prova prova, double marcaAlcancada, String pais) {
+        this.atleta = atleta;
+        this.prova = prova;
         this.marcaAlcancada = marcaAlcancada;
         this.pais = pais;
     }
@@ -23,14 +24,10 @@ public class Inscricao {
     }
 
     public String getNomeProva() {
-        return nomeProva;
+        return prova.getNome();
     }
 
-    public void setNomeProva(String nomeProva) {
-        this.nomeProva = nomeProva;
-    }
-
-    public float getMarcaAlcancada() {
+    public double getMarcaAlcancada() {
         return marcaAlcancada;
     }
 

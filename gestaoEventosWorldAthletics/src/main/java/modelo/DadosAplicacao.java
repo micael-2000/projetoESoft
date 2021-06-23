@@ -84,6 +84,20 @@ public class DadosAplicacao {
         listaProvasPreDefinidas.put(prova.getId(), prova);
     }
 
+    public Prova getProvaByName(String nome) {
+
+        ArrayList<Prova> provas = null;
+        for (Evento evento : listaEventos) {
+            provas = evento.getListaProvas();
+            for (Prova prova: provas) {
+                if (prova.getNome().equals(nome)){
+                    return prova;
+                }
+            }
+        }
+        return null;
+    }
+
 
     //Atletas
     public ArrayList<Atleta> getListaAtletas() {
@@ -102,6 +116,15 @@ public class DadosAplicacao {
         return listaAtletas.get(index);
     }
 
+    public Atleta getAtletaByNumeroAtleta(int numero) {
+        for(Atleta atleta : listaAtletas){
+            if(atleta.getNumeroAtleta() == numero){
+                return atleta;
+            }
+        }
+        return null;
+    }
+
     //Inscricoes
     public ArrayList<Inscricao> getListaInscricoes() {
         return listaInscricoes;
@@ -112,4 +135,5 @@ public class DadosAplicacao {
     public void removeInscricao(int posicao) {
             listaInscricoes.remove(posicao);
     }
+
 }

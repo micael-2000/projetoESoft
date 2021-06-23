@@ -75,7 +75,13 @@ public class EcraDetalhes extends JDialog {
         }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
 
         btnRecords.addActionListener(this::btnRecordsActionPerformed);
-        btnInscreverNumaProva.addActionListener(this::btnInscreverNumaProvaActionPerformed);
+        //btnInscreverNumaProva.addActionListener(this::btnInscreverNumaProvaActionPerformed);
+
+        btnInscreverNumaProva.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                btnInscreverNumaProvaActionPerformed(atleta);
+            }
+        });
 
         comboBoxGenero.setModel(new DefaultComboBoxModel(new String[]{"Masculino", "Feminino"}));
 
@@ -93,7 +99,7 @@ public class EcraDetalhes extends JDialog {
                     int column = target.getSelectedColumn();
 
                     //eliminar inscricao
-                    if(column == 4) {
+                    if(column == 3) {
                         btnEliminarActionPerformed(row);
                     }
 
@@ -187,10 +193,9 @@ public class EcraDetalhes extends JDialog {
         //TODO
     }
 
-    private void btnInscreverNumaProvaActionPerformed(ActionEvent actionEvent) {
-        new EcraCriarInscricao().setVisible(true);
+    private void btnInscreverNumaProvaActionPerformed(Atleta atleta) {
+        new EcraCriarInscricao(atleta).setVisible(true);
         preencherInscricoes();
-        //TODO
     }
 
     private void btnEliminarActionPerformed(int row) {
@@ -221,13 +226,13 @@ public class EcraDetalhes extends JDialog {
     }
 
     private void preencherInscricoes() {
-        Object columnNames[] = {"Nome da Prova", "Marca alcancada", "Pais", "Inscrição é válida?", "Eliminar"};
+        Object columnNames[] = {"Nome da Prova", "Marca alcancada", "Pais", "Eliminar"};
 
         DefaultTableModel model = new DefaultTableModel(null, columnNames);
         tabelaInscricoes.setModel(model);
 
         for (Inscricao inscricao: DadosAplicacao.INSTANCE.getListaInscricoes()) {
-            model.addRow(new Object[]{inscricao.getNomeProva(), inscricao.getMarcaAlcancada(), inscricao.getPais(), inscricao.isValida(), "Eliminar"});
+            model.addRow(new Object[]{inscricao.getNomeProva(), inscricao.getMarcaAlcancada(), inscricao.getPais(), "Eliminar"});
         }
     }
 

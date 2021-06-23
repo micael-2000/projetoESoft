@@ -1,11 +1,11 @@
 package vista.Atleta;
 
-import modelo.DadosAplicacao;
-import modelo.Inscricao;
+import modelo.*;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 
 public class EcraCriarInscricao extends JDialog {
     private JPanel contentPane;
@@ -18,14 +18,14 @@ public class EcraCriarInscricao extends JDialog {
     private JLabel lblMarcaAlcancada;
     private JLabel lblPais;
 
-    public EcraCriarInscricao() {
+    public EcraCriarInscricao(Atleta atleta) {
         setContentPane(contentPane);
         setModal(true);
         getRootPane().setDefaultButton(btnCriar);
 
         btnCriar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                btnCriarActionPerformed();
+                btnCriarActionPerformed(atleta);
             }
         });
 
@@ -53,54 +53,125 @@ public class EcraCriarInscricao extends JDialog {
         pack();
     }
 
-    private void btnCriarActionPerformed() {
+    private void btnCriarActionPerformed(Atleta atleta) {
         // add your code here
-        //TODO
-        Inscricao inscricao = new Inscricao("100 metros", (float) 16.7,"portugal");
-        //inscricao.setAtleta();
 
+        String nome = txtNomeDaProva.getText();
+        if(nome.equals("")) {
+            mostrarErro(1);
+            return;
+        }
+
+        if(nome == null){
+            mostrarErro(2);
+            return;
+        }
+
+        ArrayList<Evento> listaEventosAux = DadosAplicacao.INSTANCE.getListaEventos();
+        ArrayList<Prova>  listaProvasAux = null;
+        String txtNomeDaProvaAux = txtNomeDaProva.getText();
+        boolean auxiliar = false;
+        Prova provaInscricao = null;
+
+        for (Evento evento: listaEventosAux) {
+            listaProvasAux = evento.getListaProvas();
+
+            for (Prova prova: listaProvasAux) {
+
+                if(prova.getNome().equals(txtNomeDaProvaAux)){
+                    provaInscricao = prova;
+                    auxiliar = true;
+                    break;
+                }
+            }
+        }
+
+        if(!auxiliar){
+            mostrarErro(3);
+            return;
+        }
+
+        String txtMarcaalcancada = txtMarcaAlcancada.getText();
+
+        if(txtMarcaalcancada.equals("")){
+            mostrarErro(4);
+            return;
+        }
+
+
+        String pais = txtPais.getText();
+        if(pais.equals("")) {
+            mostrarErro(6);
+            return;
+        }
+
+        if(pais == null){
+            mostrarErro(7);
+            return;
+        }
+
+        double marca = 0;
+        try{
+            marca = Double.parseDouble(txtMarcaalcancada);
+        }catch (final NumberFormatException e){
+            marca = -1;
+        }
+        boolean provaEValida= isInscricaoValida(marca, provaInscricao);
+
+        if(!provaEValida){
+            mostrarErro(8);
+            return;
+        }
+
+        Inscricao inscricao = new Inscricao(atleta,provaInscricao, marca,pais);
         DadosAplicacao.INSTANCE.addInscricao(inscricao);
-        dispose();
+
+        setVisible(false);
     }
+
+
 
     private void btnSairActionPerformed() {
         // add your code here if necessary
 
-        dispose();
+        setVisible(false);
+    }
+
+    private boolean isInscricaoValida(Double marcaAlcancada, Prova prova) {
+        System.out.println("Marac alcancada: " + marcaAlcancada.toString() + " Prova: " +  prova.getMarcaMinima());
+
+        if(marcaAlcancada  < prova.getMarcaMinima()){
+            return false;
+        }
+        return true;
     }
 
     private void mostrarErro(int codigo) {
 
         switch (codigo){
             case 1 :
-                JOptionPane.showMessageDialog(null, "O Campo \"Nome\" é mandatório.");
+                JOptionPane.showMessageDialog(null, "O Campo \"Nome da Prova\" é mandatório.");
                 break;
             case 2 :
                 JOptionPane.showMessageDialog(null, "O nome introduzido é inválido.");
                 break;
             case 3 :
-                JOptionPane.showMessageDialog(null, "O Campo \"País\" é mandatório.");
+                JOptionPane.showMessageDialog(null, "Não existe uma prova com o nome indicado.");
                 break;
             case 4 :
-                JOptionPane.showMessageDialog(null, "O país introduzido é inválido.");
+                JOptionPane.showMessageDialog(null, "O campo \"Marca alcançada\" é mandatório");
                 break;
             case 5 :
-                JOptionPane.showMessageDialog(null, "O campo género não está selecionado.");
+                JOptionPane.showMessageDialog(null, "A marca alcançada não é válida. ");
                 break;
             case 6 :
-                JOptionPane.showMessageDialog(null, "O Campo \"Data de nascimento\" é mandatório.");
+                JOptionPane.showMessageDialog(null, "O campo \"País\" é Mandatório.");
                 break;
             case 7 :
-                JOptionPane.showMessageDialog(null, "A data de nascimento não está no formato \"DD-MM-YYYY\".");
+                JOptionPane.showMessageDialog(null, "O país não é válido.");
                 break;
             case 8 :
-                JOptionPane.showMessageDialog(null, "A data de nascimento é inválida.");
-                break;
-            case 9 :
-                JOptionPane.showMessageDialog(null, "O contatcto não está preenchido.");
-                break;
-            case 10 :
-                JOptionPane.showMessageDialog(null, "O contatcto é inválido");
+                JOptionPane.showMessageDialog(null, "A marca alcançada pelo atleta não atinge os mínimos definidos para a prova.");
                 break;
         }
     }
