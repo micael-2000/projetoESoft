@@ -196,17 +196,17 @@ public class EcraEventos extends JFrame{
     }
 
     public void btnEditarEventoActionPerformed(int posicaoEvento) {
-        setVisible(false);
+
         new EcraCriarEditarEvento(DadosAplicacao.INSTANCE.getListaEventos().get(posicaoEvento));
     }
 
     public void btnConsultarRankingsActionPerformed(ActionEvent e){
-        setVisible(false);
+
         new EcraRankings();
     }
 
     public void btnConsultarEventoActionPeformed(int posicaoEvento){
-        setVisible(false);
+        //setVisible(false);
         new EcraProgramaEvento(DadosAplicacao.INSTANCE.getEvento(posicaoEvento));
     }
 }

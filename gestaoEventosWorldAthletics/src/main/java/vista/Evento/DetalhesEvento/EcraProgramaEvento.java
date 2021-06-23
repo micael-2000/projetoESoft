@@ -30,14 +30,13 @@ public class EcraProgramaEvento extends JDialog{
         GridLayout gl2 =new GridLayout(1,10);
         painelTabelas.setLayout(gl2);
 
-        painelTabelas.setSize(new Dimension(100,200));
+        painelTabelas.setSize(new Dimension(200,200));
 
         criarBotoesECalendario(evento, painelDias);
 
         ArrayList<Prova> provas = evento.getListaProvas();
 
         criarTabelasRondas(provas);
-
 
         voltarButton.addActionListener(this::btnVoltarActionPerformed);
 
@@ -83,7 +82,7 @@ public class EcraProgramaEvento extends JDialog{
 
         JScrollPane sp = new JScrollPane(tableProvasPorDia);
 
-        painelDias.add(sp);
+        painelTabelas.add(sp);
 
         tableProvasPorDia.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {

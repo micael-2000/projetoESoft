@@ -100,37 +100,6 @@ public class EcraResultadosRondaProva extends JDialog {
       //  DadosAplicacao.INSTANCE.addResultado(tableResultados);
     //}
 
-    /*private void guardarRecordesDisco() {
-        ObjectOutputStream oos = null;
-        try {
-            File f =new File(System.getProperty("user.home")+ File.separator+"rondas.resultados");
-            oos = new ObjectOutputStream(new FileOutputStream(f));
-            oos.writeObject(tableResultados);
-            oos.close();
-        } catch (IOException ex) {
-            Logger.getLogger(Evento.class.getName()).log(Level.SEVERE, null,
-                    ex);
-        }
-    }*/
-
-    /*private void lerRecordesDoDisco() {
-        ObjectInputStream ois = null;
-        File f = new File(System.getProperty("user.home")+File.separator+"rondas.resultados");
-        if (!f.canRead()) return;
-
-        try {
-            ois = new ObjectInputStream(new FileInputStream(f));
-            tableResultados = (JTable) ois.readObject();
-            ois.close();
-        } catch (IOException ex) {
-            Logger.getLogger(Evento.class.getName()).log(Level.SEVERE,
-                    null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(Evento.class.getName()).log(Level.SEVERE,
-                    null, ex);
-        }
-    }*/
-
     public class ColumnName {
         String cname;
 

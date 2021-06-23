@@ -1,11 +1,15 @@
 package vista.Prova;
 
 import modelo.DadosAplicacao;
+import modelo.Evento;
 import modelo.Genero;
 import modelo.ProvaPreDefinida;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
+import java.util.HashSet;
 
 public class EcraCriarEditarDetalhesProva extends JDialog{
     private JPanel painelDetalhesEditarProva;
@@ -65,9 +69,29 @@ public class EcraCriarEditarDetalhesProva extends JDialog{
         tipoProva.setText(prova.getTipoProva());
         recordesMundialAtual.setText(prova.getRecordesMundialAtual());
         recordistas.setText(prova.getRecordistas());
+
+        ArrayList<String> listaEventos = new ArrayList<>();
+        boolean isRepeated = false;
         for (String nome : prova.getEventosEmQueDecorreu()) {
-            eventosEmQueDecorreu.append(nome);
-            eventosEmQueDecorreu.append("\n");
+
+            for (int i = 0; i < prova.getEventosEmQueDecorreu().size(); i++) {
+                String conteudo = eventosEmQueDecorreu.getText();
+
+                listaEventos.add(conteudo);
+            }
+
+            for (int i = 0; i < listaEventos.size(); i++) {
+                if (listaEventos.get(i).equals(nome)){
+                    isRepeated = true;
+                    break;
+                }
+            }
+
+            if (!isRepeated){
+                eventosEmQueDecorreu.append(nome);
+                eventosEmQueDecorreu.append("\n");
+            }
+
         }
         notas.setText(prova.getNotas());
     }
@@ -103,6 +127,7 @@ public class EcraCriarEditarDetalhesProva extends JDialog{
 
     private void btnVoltarActionPerformed(ActionEvent e) {
       setVisible(false);
+
       getParent().setVisible(true);
     }
 
