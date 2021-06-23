@@ -28,7 +28,7 @@ public class EcraInscritosEvento  extends JDialog{
 
         labelTable.setText("Lista de Inscritos "+prova.getNome());
 
-        criarListaInscritos(evento, painelTabela);
+        criarListaInscritos(evento, prova);
 
         voltarButton.addActionListener(this::btnVoltarActionPerformed);
 
@@ -42,9 +42,9 @@ public class EcraInscritosEvento  extends JDialog{
         setVisible(false);
     }
 
-    public void criarListaInscritos(Evento evento, JPanel painel){
-        //obter numero de inscritos
-        //evento.ListaInscritos();
+    public void criarListaInscritos(Evento evento, Prova prova){
+        //obter numero de inscrito da prova
+        //prova.getListaInscritos(); -> método por fazer pelo francisco
 
         String[][] inscritos = new String[4][4];
 
