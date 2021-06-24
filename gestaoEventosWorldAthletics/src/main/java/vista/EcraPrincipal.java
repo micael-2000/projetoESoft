@@ -47,7 +47,7 @@ public class EcraPrincipal extends JFrame{
     }
 
     private void btnAtletasActionPerformed(ActionEvent actionEvent) {
-
+        new EcraAtletas("Ecrã Atletas").setVisible(true);
     }
     private void btnInscricoesActionPerformed(ActionEvent actionEvent) {
         new EcraInscricoes("Ecrã Inscrições").setVisible(true);
