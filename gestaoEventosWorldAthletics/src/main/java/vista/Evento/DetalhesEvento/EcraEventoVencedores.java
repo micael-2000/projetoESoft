@@ -45,7 +45,7 @@ public class EcraEventoVencedores extends JFrame{
         for (Prova prova : evento.getListaProvas()) {
             model.addRow(new Object[]{prova.getNome()});
             for (int i = 0; i < 2; i++) {
-                model.addRow(new Object[]{"Micael Dias", "M", "Portugal", "10.23"});
+                model.addRow(new Object[]{"", "M", "Portugal", "10.23"});
             }
         }
 

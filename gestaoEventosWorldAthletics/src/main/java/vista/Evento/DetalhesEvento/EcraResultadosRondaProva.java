@@ -3,26 +3,35 @@ package vista.Evento.DetalhesEvento;
 import modelo.*;
 
 import javax.swing.*;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.*;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class EcraResultadosRondaProva extends JDialog {
 
     private JButton voltarButton;
-    private JButton atualizarResultadosButton;
+
     private JButton saveButton;
     private JLabel nomeRonda;
     private JLabel nomeEvento;
-    private JTable tableResultados;
+    private JTable tableResultados2;
     private JPanel painelResultados;
     private JPanel painelTabela;
-    private JScrollPane jsp;
+    private Ronda ronda;
+    private Prova prova;
+    private JScrollPane jsp2;
 
-    public EcraResultadosRondaProva(Evento evento, Prova prova){
-
+    public EcraResultadosRondaProva(Evento evento, Prova prova, Ronda ronda){
+        this.ronda = ronda;
+        this.prova = prova;
         nomeRonda.setText(prova.getNome());
         nomeEvento.setText(evento.getNomeEvento());
 
@@ -32,9 +41,8 @@ public class EcraResultadosRondaProva extends JDialog {
         criarTabelaResultados();
 
         voltarButton.addActionListener(this::btnVoltarActionPerformed);
-        atualizarResultadosButton.addActionListener(this::btnAtualizarResultadosActionPerformed);
-        saveButton.setVisible(false);
 
+        saveButton.addActionListener(this::btnSaveActionPerformed);
         painelResultados.setPreferredSize(new Dimension(1200,700));
         setContentPane(painelResultados);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -48,68 +56,49 @@ public class EcraResultadosRondaProva extends JDialog {
 
     public void criarTabelaResultados(){
 
-        //getListaInscritos
+        Object[] columnNames = { "Id", "Nome", "Pais","Pos", "Resultado", "Diferenca", "Qualificado"};
 
-        String[][] inscritos = new String[4][7];
+        DefaultTableModel model2 = new DefaultTableModel(columnNames, ronda.getListaInscritos().size());
 
-        int numCol=0;
+        tableResultados2 = new JTable(model2);
 
-        for (int i = 0; i < 3; i++) {
-            inscritos[i][numCol] = "1";
-            inscritos[i][numCol+1] = "Rúben Carreira";
-            inscritos[i][numCol+2] = "Portugal";
-            inscritos[i][numCol+3] = String.valueOf (i+1);
-            inscritos[i][numCol+4] = "00:02:05";
-            inscritos[i][numCol+5] = "--------";
-            if (i < 2){
-                inscritos[i][numCol+6] = "Q";
-            } else{
-                inscritos[i][numCol+6] = "";
-            }
+        jsp2 = new JScrollPane(tableResultados2);
 
-        }
+        painelTabela.add(jsp2);
 
-        ColumnName columnNames[] = { new ColumnName("ID"), new ColumnName("Nome"), new ColumnName("Pais"), new ColumnName("Pos"), new ColumnName("Resultado"),
-                                        new ColumnName("Diferença"), new ColumnName("Qualificado")};
 
-        ColumnName columns[] = {columnNames[0], columnNames[1], columnNames[2], columnNames[3], columnNames[4], columnNames[5], columnNames[6]};
-
-        tableResultados = new JTable(inscritos, columnNames);
-        tableResultados.setDefaultEditor(Object.class, null);
-
-        jsp = new JScrollPane(tableResultados);
-
-        painelTabela.add(jsp);
-
-    }
-
-    public void btnAtualizarResultadosActionPerformed(ActionEvent e){
-        tableResultados.setDefaultEditor(ColumnName.class, new DefaultCellEditor(new JTextField()));
-        saveButton.setVisible(true);
-        saveButton.addActionListener(this::btnSaveActionPerformed);
-        atualizarResultadosButton.setVisible(false);
     }
 
     public void btnSaveActionPerformed(ActionEvent e){
-        //guardarResultados();
-        saveButton.setVisible(false);
-        atualizarResultadosButton.setVisible(true);
-    }
+        int numRes = DadosAplicacao.INSTANCE.getListaResultados().size();
 
-    //private void guardarResultados(){
-      //  DadosAplicacao.INSTANCE.addResultado(tableResultados);
-    //}
+        String[][] dados = new String[ronda.getListaInscritos().size()][7];
+        Resultado resultado = null;
+        for (int i = 0; i < tableResultados2.getRowCount(); i++) {
+            for (int j = 0; j < tableResultados2.getColumnCount(); j++) {
+                dados[i][j] = (String) tableResultados2.getModel().getValueAt(i,j);
 
-    public class ColumnName {
-        String cname;
-
-        public ColumnName(String name) {
-            cname = name;
+            }
         }
 
-        public String toString() {
-            return cname;
+
+
+        int inc=0;
+        for (int i = 0; i < dados.length; i++) {
+            if (ronda.isAtletaNaRonda(Integer.parseInt(dados[i][inc]), dados[i][inc + 1]) == 0){
+                JOptionPane.showMessageDialog(null,"O atleta que registou não se encontra inscrito na ronda");
+                break;
+            }else {
+                resultado = new Resultado(Integer.parseInt(dados[i][inc]), dados[i][inc + 1], dados[i][inc + 2], Integer.parseInt(dados[i][inc + 3]),
+                        Double.parseDouble(dados[i][inc + 4]), Boolean.parseBoolean(dados[i][inc + 6]), ronda.getNomeRonda(), prova.getNome());
+                DadosAplicacao.INSTANCE.addResultado(resultado);
+            }
         }
+
+        if (numRes < DadosAplicacao.INSTANCE.getListaResultados().size()){
+            JOptionPane.showMessageDialog(null, "Resultado(s) adicionado(s)!");
+        }
+
     }
 
 

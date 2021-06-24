@@ -2,11 +2,15 @@ package vista.Evento;
 
 import modelo.DadosAplicacao;
 import modelo.Evento;
+import modelo.Pais;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class EcraRankings extends JFrame{
     private JPanel painelRankingsGeral;
@@ -32,9 +36,35 @@ public class EcraRankings extends JFrame{
         model = new DefaultTableModel(null, columnNames);
         tabelaRanking.setModel(model);
 
-        for (Evento evento: DadosAplicacao.INSTANCE.getListaEventos()) {
-            model.addRow(new Object[]{"1 ", "2 ", " 3", "4 ", " 5", " 6"});
+        //Pais[] paises =  DadosAplicacao.INSTANCE.getListaPais().clone();
+
+        Collections.sort(DadosAplicacao.INSTANCE.getListaPais(), new Comparator<Pais>() {
+            @Override
+            public int compare(Pais pais1, Pais pais2) {
+                return Integer.compare(pais1.getTotalMedalhas(), pais2.getTotalMedalhas());
+            }
+        });
+
+        int posicao = 1;
+        for (Pais pais: DadosAplicacao.INSTANCE.getListaPais()) {
+            model.addRow(new Object[]{ posicao, pais.getNome(), pais.getMedalhasOuro(), pais.getMedalhasPrata(), pais.getMedalhasBronze(), pais.getTotalMedalhas()});
+            posicao ++;
         }
+/*
+        for (int i = 0; i < paises.length; i++){
+            posicao = i;
+            medalhas = paises[i].getTotalMedalhas();
+            for (int j = 0; j < paises.length; j++) {
+                if (paises[j].getTotalMedalhas() > medalhas){
+                    posicao = j;
+                    medalhas = paises[j].getTotalMedalhas();
+                }
+            }
+            model.addRow(new Object[]{ i + 1, paises[posicao].getNome(), paises[posicao].getMedalhasOuro(), paises[posicao].getMedalhasPrata(), paises[posicao].getMedalhasBronze(), paises[posicao].getTotalMedalhas()});
+            paises[posicao]= new Pais(" ");
+        }
+
+ */
 
         TableColumnModel tcm = tabelaRanking.getColumnModel();
         tcm.getColumn(1).setPreferredWidth(150);

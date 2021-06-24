@@ -3,6 +3,7 @@ package modelo;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 
 public class DadosAplicacao {
     public static DadosAplicacao INSTANCE = new DadosAplicacao();
@@ -10,6 +11,9 @@ public class DadosAplicacao {
     private ArrayList<Evento> listaEventos;
     private ArrayList<Atleta> listaAtletas;
     private ArrayList<Inscricao> listaInscricoes;
+    private ArrayList<Pais> listaPais;
+    private ArrayList<Resultado> listaResultados;
+
     //private ArrayList<JTable> listaResultados;
     public DadosAplicacao() {
         //Provas pre definido
@@ -19,26 +23,9 @@ public class DadosAplicacao {
         listaEventos = new ArrayList<>();
         listaAtletas = new ArrayList<>();
         listaInscricoes = new ArrayList<>();
+        listaPais = new ArrayList<>();
+        listaResultados = new ArrayList<>();
     }
-
-    //public void addResultado(JTable tabelaResultado){ listaResultados.add(tabelaResultado); }
-
-    //public void removeResultado(int posicao){
-        //listaResultados.remove(posicao);
-    //}
-
-    //public ArrayList<JTable> getListaResultados(){ return listaResultados; }
-
-    //public JTable getResultado(int index){ return listaResultados.get(index); }
-
-    //public int getIndiceResultado(JTable table){
-        //return listaEventos.indexOf(table);
-    //}
-
-
-
-
-
 
     //Evento
     public void removeEvento(int posicao){
@@ -80,6 +67,7 @@ public class DadosAplicacao {
         }
         return listaProvasPreDefinidas.size();
     }
+
     public void addProvaPreDefinida(ProvaPreDefinida prova){
         listaProvasPreDefinidas.put(prova.getId(), prova);
     }
@@ -99,6 +87,7 @@ public class DadosAplicacao {
     }
 
 
+
     //Atletas
     public ArrayList<Atleta> getListaAtletas() {
         return listaAtletas;
@@ -106,6 +95,21 @@ public class DadosAplicacao {
 
     public void addAtleta(Atleta atleta){
         listaAtletas.add(atleta);
+        int achado = -1;
+
+        for (Pais pais: listaPais) {
+            if(pais.getNome().equals(atleta.getPais())){
+                atleta.setPaisRef(pais);
+                achado = 1;
+                break;
+            }
+        }
+
+        if(achado == -1){
+            Pais pais = new Pais(atleta.getPais());
+            listaPais.add(pais);
+            atleta.setPaisRef(pais);
+        }
     }
 
     public void removeAtleta(int posicao) {
@@ -130,10 +134,63 @@ public class DadosAplicacao {
         return listaInscricoes;
     }
 
+    public ArrayList<Inscricao> getListaInscricoesPorProva(Prova prova) {
+        ArrayList<Inscricao> listaInscricoesDaProva = new ArrayList<>();
+
+        for (Inscricao insc : listaInscricoes){
+            if (insc.getNomeProva().equals(prova.getNome())){
+                listaInscricoesDaProva.add(insc);
+            }
+        }
+
+        return listaInscricoesDaProva;
+    }
+
+    public ArrayList<Atleta> getAtletasInscritosNumaProva(Prova prova){
+        ArrayList<Atleta> listaAtletasInscritosNaProva = new ArrayList<>();
+        for (Inscricao insc : listaInscricoes){
+            if (insc.getNomeProva().equals(prova.getNome())){
+                listaAtletasInscritosNaProva.add(insc.getAtleta());
+            }
+        }
+
+        prova.setListaAtletas(listaAtletasInscritosNaProva);
+
+        return listaAtletasInscritosNaProva;
+
+    }
+
     public void addInscricao(Inscricao inscricao){listaInscricoes.add(inscricao);}
 
     public void removeInscricao(int posicao) {
             listaInscricoes.remove(posicao);
     }
 
+    //Pais
+
+    public ArrayList<Pais> getListaPais(){
+        return listaPais;
+    }
+
+    //Resultados
+
+
+    public ArrayList<Resultado> getListaResultados() {
+        return listaResultados;
+    }
+
+    public void addResultado(Resultado resultado){
+        listaResultados.add(resultado);
+    }
+
+    public ArrayList<Resultado> getResultadosRondaDeProva(String nomeRonda, String nomeProva ){
+        ArrayList<Resultado> resultados = new ArrayList<>();
+        for (Resultado res : listaResultados){
+            if (res.getNomeProva().equals(nomeProva) && res.getNomeRonda().equals(nomeRonda)){
+                resultados.add(res);
+            }
+        }
+
+        return resultados;
+    }
 }

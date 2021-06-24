@@ -1,6 +1,7 @@
 package modelo;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class ProvaPreDefinida {
     private int id;
@@ -10,9 +11,10 @@ public class ProvaPreDefinida {
     private String tipoProva;
     private Genero genero;
     private String notas;
-    private String recordesMundialAtual;
-    private String recordistas;
+    private ArrayList<String> recordesMundialAtual;
+    private ArrayList<String> recordistas;
     private ArrayList<String> eventosEmQueDecorreu;
+    private ArrayList<Ronda> listaDeRondas;
     private double marcaMinima;
 
     public ProvaPreDefinida(String nome, String categoria, String local, String tipoProva, Genero genero, String notas, Integer id, double marcaMinima) {
@@ -29,8 +31,8 @@ public class ProvaPreDefinida {
         this.tipoProva = tipoProva;
         this.genero = genero;
         this.notas = notas;
-        recordesMundialAtual = null;
-        recordistas = null;
+        recordesMundialAtual = new ArrayList<>();
+        recordistas = new ArrayList<>();
         eventosEmQueDecorreu = new ArrayList<>();
         this.marcaMinima = marcaMinima;
     }
@@ -87,15 +89,40 @@ public class ProvaPreDefinida {
         this.notas = notas;
     }
 
-    public String getRecordesMundialAtual() {
+    public ArrayList<String> getRecordesMundial() {
+
+        ArrayList<Resultado> resultados = DadosAplicacao.INSTANCE.getListaResultados();
+        recordesMundialAtual = new ArrayList<>();
+        recordistas = new ArrayList<>();
+        double maior =0;
+        double pontuacaoAtual=0;
+        for(Resultado res : resultados){
+            if (res.getNomeProva().equals(this.nome)){
+                pontuacaoAtual = res.getPontuacao();
+                if (pontuacaoAtual > maior){
+                    maior = pontuacaoAtual;
+                    if (recordesMundialAtual.size() <= 3 ){
+                        recordesMundialAtual.add(String.valueOf(maior));
+                        recordistas.add(res.getNome());
+                    } else{
+                        for (String record : recordesMundialAtual){
+                            if (maior > Integer.parseInt(record)){
+                                recordesMundialAtual.remove(record);
+                                recordesMundialAtual.add(String.valueOf(maior));
+
+                                recordistas.add(res.getNome());
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         return recordesMundialAtual;
     }
 
-    public void setRecordesMundialAtual(String recordesMundialAtual) {
-        this.recordesMundialAtual = recordesMundialAtual;
-    }
 
-    public String getRecordistas() {
+    public ArrayList<String> getRecordistas() {
         return recordistas;
     }
 
@@ -103,11 +130,8 @@ public class ProvaPreDefinida {
         return marcaMinima;
     }
 
-    public void setRecordistas(String recordistas) {
-        this.recordistas = recordistas;
-    }
-
     public ArrayList<String> getEventosEmQueDecorreu() {
+        eventosEmQueDecorreu = new ArrayList<>();
         ArrayList<Evento> eventos = DadosAplicacao.INSTANCE.getListaEventos();
         ArrayList<Prova> provas = null;
 
@@ -116,7 +140,6 @@ public class ProvaPreDefinida {
 
             for (Prova prova: provas) {
                 if (prova.getNome().equals(this.nome)){
-                    System.out.println(evento.getNomeEvento());
                     eventosEmQueDecorreu.add(evento.getNomeEvento());
 
                     break;
@@ -126,6 +149,5 @@ public class ProvaPreDefinida {
 
         return eventosEmQueDecorreu;
     }
-
 
 }

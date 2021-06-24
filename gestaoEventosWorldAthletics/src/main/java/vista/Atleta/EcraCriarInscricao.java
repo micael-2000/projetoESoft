@@ -54,7 +54,6 @@ public class EcraCriarInscricao extends JDialog {
     }
 
     private void btnCriarActionPerformed(Atleta atleta) {
-        // add your code here
 
         String nome = txtNomeDaProva.getText();
         if(nome.equals("")) {
@@ -133,7 +132,6 @@ public class EcraCriarInscricao extends JDialog {
 
     private void btnSairActionPerformed() {
         // add your code here if necessary
-
         setVisible(false);
     }
 

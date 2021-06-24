@@ -45,7 +45,7 @@ public class EcraInscricoes extends JFrame {
             }
         });
 
-        this.preencherTabelaInscrocoes();
+        this.preencherTabelaInscricoes();
 
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setContentPane(painelPrincipal);
@@ -108,7 +108,7 @@ public class EcraInscricoes extends JFrame {
                     ioe.printStackTrace();
                 }
             }
-            preencherTabelaInscrocoes();
+            preencherTabelaInscricoes();
         }
     }
 
@@ -116,13 +116,13 @@ public class EcraInscricoes extends JFrame {
         int input = JOptionPane.showConfirmDialog(null, "Tem a certaza que deseja remover a Inscrição?",null,JOptionPane.YES_NO_OPTION);
         if (input == JOptionPane.YES_OPTION){
             DadosAplicacao.INSTANCE.removeInscricao(row);
-            preencherTabelaInscrocoes();
+            preencherTabelaInscricoes();
             return;
         }
         return;
     }
 
-    private void preencherTabelaInscrocoes() {
+    private void preencherTabelaInscricoes() {
         Object columnNames[] = {"Nome da Prova", "Nome do atleta", "Marca lcançada", "País","Eliminar"};
 
         DefaultTableModel model = new DefaultTableModel(null, columnNames);

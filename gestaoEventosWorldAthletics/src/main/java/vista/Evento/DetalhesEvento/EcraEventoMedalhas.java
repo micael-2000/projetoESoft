@@ -1,12 +1,14 @@
 package vista.Evento.DetalhesEvento;
 
-import modelo.DadosAplicacao;
-import modelo.Evento;
+import modelo.*;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class EcraEventoMedalhas extends JFrame{
     private JPanel painelEventoMedalhas;
@@ -21,9 +23,13 @@ public class EcraEventoMedalhas extends JFrame{
     private DefaultTableModel modelPais;
     private DefaultTableModel modelAtleta;
     private Evento evento;
+    private ArrayList<Atleta> atletas;
+    private ArrayList<Pais> paises;
+
 
     public EcraEventoMedalhas(Evento evento){
         this.evento = evento;
+        leituraDados();
         nomeEvento.setText(evento.getNomeEvento());
 
         voltarButton.addActionListener(this::btnVoltarActionPeformed);
@@ -39,14 +45,56 @@ public class EcraEventoMedalhas extends JFrame{
         setVisible(true);
     }
 
+    private void leituraDados(){
+        atletas = new ArrayList<>();
+        paises = new ArrayList<>();
+        for (Prova prova: evento.getListaProvas()) {
+            atletas.addAll(prova.getListaAtletas());
+        }
+
+        //ordenar os atletas pelo o criterio do numero de medalhas
+        Collections.sort(atletas, new Comparator<Atleta>() {
+            @Override
+            public int compare(Atleta atleta1, Atleta atleta2) {
+                return Integer.compare(atleta1.getTotalMedalhas(), atleta2.getTotalMedalhas());
+            }
+        });
+
+        //buscar paises dos atletas
+        for (Atleta atleta: atletas) {
+            if(!paises.contains(atleta.getPaisRef())){
+                paises.add(atleta.getPaisRef());
+            }
+        }
+
+        //ordenar os paieses pelo o criterio do numero de medalhas
+        Collections.sort(paises, new Comparator<Pais>() {
+            @Override
+            public int compare(Pais pais1, Pais pais2) {
+                return Integer.compare(pais1.getTotalMedalhas(), pais2.getTotalMedalhas());
+            }
+        });
+    }
+
+
     private void preenchimentoTabela(String nomeTabela, DefaultTableModel model, JTable tabela, JScrollPane scrollPane){
         Object columnNames[] = {"Rank", nomeTabela, "Ouro", "Prata", "Bronze", "Total"};
 
         model = new DefaultTableModel(null, columnNames);
         tabela.setModel(model);
+        int posicao = 1;
 
-        for (Evento evento: DadosAplicacao.INSTANCE.getListaEventos()) {
-            model.addRow(new Object[]{"1 ", "2 ", " 3", "4 ", " 5", " 6"});
+        if(nomeTabela.equals("Pais")){
+            for (Pais pais: paises) {
+                model.addRow(new Object[]{posicao, pais.getNome(), pais.getNome(), pais.getMedalhasOuro(), pais.getMedalhasPrata(), pais.getMedalhasBronze(), pais.getTotalMedalhas()});
+                posicao++;
+            }
+        }
+        else if(nomeTabela.equals("Atleta")){
+            for (Atleta atleta : atletas) {
+                model.addRow(new Object[]{posicao, atleta.getNome(), atleta.getMedalhasOuro(), atleta.getMedalhasPrata(), atleta.getMedalhasBronze(), atleta.getTotalMedalhas()});
+                posicao++;
+            }
         }
 
         TableColumnModel tcm = tabela.getColumnModel();

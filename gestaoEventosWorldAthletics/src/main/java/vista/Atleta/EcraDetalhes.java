@@ -109,7 +109,7 @@ public class EcraDetalhes extends JDialog {
 
 
         prencherDadosAtleta(atleta);
-        preencherHistoricoAtleta();
+        preencherHistoricoAtleta(atleta);
         preencherInscricoes();
 
         pack();
@@ -181,12 +181,12 @@ public class EcraDetalhes extends JDialog {
         atleta.setDataNascimento(data);
         atleta.setContacto(contacto);
 
-        dispose();
+        setVisible(false);
     }
 
     private void btnSairActionPerformed() {
         // add your code here if necessary
-        dispose();
+        setVisible(false);
     }
 
     private void btnRecordsActionPerformed(ActionEvent actionEvent) {
@@ -221,8 +221,20 @@ public class EcraDetalhes extends JDialog {
         txtDataNascimento.setText(atleta.getDataNascimento().toString());
     }
 
-    private void preencherHistoricoAtleta() {
-        //TODO
+    private void preencherHistoricoAtleta(Atleta atleta) {
+
+        Object columnNames[] = {"ID", "Prova", "Resultado", "Evento", "Posicao"};
+
+        DefaultTableModel model = new DefaultTableModel(null, columnNames);
+        tableHistorico.setModel(model);
+
+        //preencher tabelado com resultados
+        /*
+        for () {
+            //model.addRow(new Object[]{inscricao.getNomeProva(), inscricao.getMarcaAlcancada(), inscricao.getPais(), "Eliminar"});
+        }
+        */
+
     }
 
     private void preencherInscricoes() {

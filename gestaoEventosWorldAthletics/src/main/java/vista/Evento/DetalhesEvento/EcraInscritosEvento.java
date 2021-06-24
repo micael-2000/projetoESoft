@@ -1,7 +1,6 @@
 package vista.Evento.DetalhesEvento;
 
-import modelo.Evento;
-import modelo.Prova;
+import modelo.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -20,15 +19,15 @@ public class EcraInscritosEvento  extends JDialog{
     //private JScrollPane jsp;
 
     //ALTERAR PROVA PARA RONDA
-    EcraInscritosEvento(Evento evento, Prova prova){
+    public EcraInscritosEvento(Evento evento, ArrayList<Atleta> atletas, Prova prova, Ronda ronda){
         this.evento = evento;
 
         GridLayout gl =new GridLayout(1,10);
         painelTabela.setLayout(gl);
 
-        labelTable.setText("Lista de Inscritos "+prova.getNome());
+        labelTable.setText("Lista de Inscritos "+prova.getNome()+" - "+ronda.getNomeRonda()+"");
 
-        criarListaInscritos(evento, prova);
+        criarListaInscritos(ronda);
 
         voltarButton.addActionListener(this::btnVoltarActionPerformed);
 
@@ -42,18 +41,18 @@ public class EcraInscritosEvento  extends JDialog{
         setVisible(false);
     }
 
-    public void criarListaInscritos(Evento evento, Prova prova){
-        //obter numero de inscrito da prova
-        //prova.getListaInscritos(); -> método por fazer pelo francisco
+    public void criarListaInscritos(Ronda ronda){
+        //ArrayList<Inscricao> listaInscricoes = DadosAplicacao.INSTANCE.getListaInscricoesPorProva(prova);
+        ArrayList<Atleta> listaInscricoes = ronda.getListaInscritos();
 
         String[][] inscritos = new String[4][4];
 
         int numCol=0;
 
-        for (int i = 0; i < 2; i++) {
-            inscritos[i][numCol] = "1";
-            inscritos[i][numCol+1] = "Rúben Carreira";
-            inscritos[i][numCol+2] = "Portugal";
+        for (int i = 0; i < listaInscricoes.size(); i++) {
+            inscritos[i][numCol] = ""+listaInscricoes.get(i).getNumeroAtleta()+"";
+            inscritos[i][numCol+1] = ""+listaInscricoes.get(i).getNome()+"";
+            inscritos[i][numCol+2] = ""+listaInscricoes.get(i).getPais()+"";
         }
 
         String[] columnNames = { "ID", "Nome", "Pais" };

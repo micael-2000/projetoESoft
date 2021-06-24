@@ -7,14 +7,30 @@ public class Atleta {
     private String genero;
     private int contacto;
     private Data dataNascimento;
+    private int medalhasBronze;
+    private int medalhasPrata;
+    private int medalhasOuro;
+    private Pais paisRef;
+    private int totalMedalhas;
 
     public Atleta(int numeroAtleta,String nome, String pais, String genero, int contacto, Data dataNascimento) {
+        this.medalhasBronze = 0;
+        this.medalhasPrata = 0;
+        this.medalhasOuro = 0;
         this.numeroAtleta = numeroAtleta;
         this.nome = nome;
         this.pais = pais;
         this.genero = genero;
         this.contacto = contacto;
         this.dataNascimento = dataNascimento;
+    }
+
+    public void setPaisRef(Pais pais) {
+        this.paisRef = pais;
+    }
+
+    public Pais getPaisRef(){
+        return paisRef;
     }
 
     public String getNome() {
@@ -59,5 +75,21 @@ public class Atleta {
 
     public int getNumeroAtleta() {
         return numeroAtleta;
+    }
+
+    public int getMedalhasBronze() {
+        return medalhasBronze;
+    }
+
+    public int getMedalhasPrata() {
+        return medalhasPrata;
+    }
+
+    public int getMedalhasOuro() {
+        return medalhasOuro;
+    }
+
+    public int getTotalMedalhas(){
+        return medalhasBronze + medalhasPrata + medalhasOuro;
     }
 }

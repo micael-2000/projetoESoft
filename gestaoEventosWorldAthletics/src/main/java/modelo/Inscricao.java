@@ -15,6 +15,18 @@ public class Inscricao {
         this.pais = pais;
     }
 
+    public Evento getEvento(){
+        for (Evento evento : DadosAplicacao.INSTANCE.getListaEventos()){
+            for (Prova prova : evento.getListaProvas()){
+                if (this.prova.getNome().equals(prova.getNome())){
+                    return evento;
+                }
+            }
+
+        }
+        return null;
+    }
+
     public Atleta getAtleta() {
         return atleta;
     }

@@ -1,11 +1,12 @@
 package vista.Evento.DetalhesEvento;
 
-import modelo.Evento;
-import modelo.Prova;
+import modelo.*;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
 
 import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 
@@ -25,9 +26,13 @@ public class EcraAcompanharProvaEvento extends JDialog{
     private JScrollPane jsp;
     private JScrollPane jsp2;
     private JScrollPane jsp3;
+    private Prova prova;
 
 
-    public EcraAcompanharProvaEvento(Evento evento, Prova prova){
+    //SO ESTÁ IMPLEMENTADO PARA PROVA COM NUMERO DE INSRCIÇOES <= 8
+    public EcraAcompanharProvaEvento(Evento evento, Prova prova, Ronda ronda){
+        this.prova = prova;
+
         nomeEvento.setText(evento.getNomeEvento());
         provaNome.setText(prova.getNome());
         //para cada ronda da prova, apresentar uma tabela com os resultados
@@ -59,39 +64,55 @@ public class EcraAcompanharProvaEvento extends JDialog{
 
     public void criarTabelaResultados(){
 
-        //getListaInscritos
+        ArrayList<Resultado> resultadosDeUmaRondaProva = new ArrayList<>();
 
-        String[][] inscritos = new String[4][7];
+        resultadosDeUmaRondaProva = DadosAplicacao.INSTANCE.getResultadosRondaDeProva("Meia Final", "Prova1");
 
-        int numCol=0;
+        int numRondas = prova.getListaDeRondas().size();
 
-        for (int i = 0; i < 3; i++) {
-            inscritos[i][numCol] = "1";
-            inscritos[i][numCol+1] = "Rúben Carreira";
-            inscritos[i][numCol+2] = "Portugal";
-            inscritos[i][numCol+3] = String.valueOf (i+1);
-            inscritos[i][numCol+4] = "00:02:05";
-            inscritos[i][numCol+5] = "--------";
-            if (i < 2){
-                inscritos[i][numCol+6] = "Q";
-            } else{
-                inscritos[i][numCol+6] = "";
+        Object[] columnNames = { "Id", "Nome", "Pais","Pos", "Resultado", "Diferenca", "Qualificado"};
+
+
+        DefaultTableModel model1 = new DefaultTableModel(columnNames, prova.getRondaPorNome("Meia Final").getListaInscritos().size());
+        DefaultTableModel model2;
+        DefaultTableModel model3;
+        double diferenca=0;
+
+        for (int i = 0; i <  prova.getRondaPorNome("Meia Final").getListaInscritos().size(); i++) {
+            if (i == 0){
+                diferenca = 0;
+            }else{
+                diferenca = resultadosDeUmaRondaProva.get(i).getPontuacao()-resultadosDeUmaRondaProva.get(i-1).getPontuacao();
+            }
+
+            model1.addRow(new Object[]{ resultadosDeUmaRondaProva.get(i).getId(), resultadosDeUmaRondaProva.get(i).getNome(), resultadosDeUmaRondaProva.get(i).getPais()
+                            ,resultadosDeUmaRondaProva.get(i).getPosicao(), resultadosDeUmaRondaProva.get(i).getPontuacao(), diferenca
+                           , resultadosDeUmaRondaProva.get(i).isClassificado()});
+        }
+
+        table1 = new JTable(model1);
+        table1.setDefaultEditor(Object.class, null);
+
+        ArrayList<Resultado> resultadosProximaRonda = DadosAplicacao.INSTANCE.getResultadosRondaDeProva("Final", "Prova1");
+
+        if (resultadosDeUmaRondaProva != null){
+            model2 = new DefaultTableModel(columnNames, resultadosProximaRonda.size());
+        } else{
+            model2 = new DefaultTableModel(columnNames, 0);
+            for (int i = 0; i <  prova.getRondaPorNome("Final").getListaInscritos().size(); i++) {
+                model2.addRow(new Object[]{resultadosProximaRonda.get(i).getId(), resultadosProximaRonda.get(i).getNome(), resultadosProximaRonda.get(i).getPais()
+                        , resultadosProximaRonda.get(i).getPosicao(), resultadosProximaRonda.get(i).getPontuacao(), diferenca
+                        , resultadosProximaRonda.get(i).isClassificado()});
             }
 
         }
 
-        ColumnName columnNames[] = { new ColumnName("ID"), new ColumnName("Nome"), new ColumnName("Pais"), new ColumnName("Pos"), new ColumnName("Resultado"),
-                new ColumnName("Diferença"), new ColumnName("Qualificado")};
-
-        ColumnName columns[] = {columnNames[0], columnNames[1], columnNames[2], columnNames[3], columnNames[4], columnNames[5], columnNames[6]};
-
-        table1 = new JTable(inscritos, columnNames);
-        table1.setDefaultEditor(Object.class, null);
-
-        table2 = new JTable(inscritos, columnNames);
+        table2 = new JTable(model2);
         table2.setDefaultEditor(Object.class, null);
 
-        table3 = new JTable(inscritos, columnNames);
+        model3 = new DefaultTableModel(columnNames, 0);
+
+        table3 = new JTable(model3);
         table3.setDefaultEditor(Object.class, null);
 
         jsp = new JScrollPane(table1);
@@ -102,18 +123,6 @@ public class EcraAcompanharProvaEvento extends JDialog{
         painel2.add(jsp2);
         painel3.add(jsp3);
 
-    }
-
-    public class ColumnName {
-        String cname;
-
-        public ColumnName(String name) {
-            cname = name;
-        }
-
-        public String toString() {
-            return cname;
-        }
     }
 
 }

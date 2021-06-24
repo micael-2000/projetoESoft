@@ -77,4 +77,8 @@ public class Data {
     public String toString() {
         return ""+this.dia+"/"+this.mes+"/"+this.ano+"";
     }
+
+    public String toStringComHora() {
+        return ""+this.dia+"/"+this.mes+"/"+this.ano+" - "+this.hora+":"+this.minutos;
+    }
 }

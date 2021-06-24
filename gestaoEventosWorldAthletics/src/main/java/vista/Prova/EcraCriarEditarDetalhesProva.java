@@ -61,38 +61,36 @@ public class EcraCriarEditarDetalhesProva extends JDialog{
     }
 
     private void carregarDados(ProvaPreDefinida prova){
+        if (eventosEmQueDecorreu.getLineCount() !=0) {
+            eventosEmQueDecorreu.setText("");
+        }
         id.setText(Integer.toString(prova.getId()));
         nome.setText(prova.getNome());
         genero.setSelectedItem(prova.getGenero());
         categoria.setText(prova.getCategoria());
         local.setText(prova.getLocal());
         tipoProva.setText(prova.getTipoProva());
-        recordesMundialAtual.setText(prova.getRecordesMundialAtual());
-        recordistas.setText(prova.getRecordistas());
 
-        ArrayList<String> listaEventos = new ArrayList<>();
+        for (String record : prova.getRecordesMundial()){
+            recordesMundialAtual.append(record);
+            recordesMundialAtual.append("\n");
+        }
+
+        for (String nome : prova.getRecordistas()){
+            recordistas.append(nome);
+            recordistas.append("\n");
+        }
+
         boolean isRepeated = false;
+
         for (String nome : prova.getEventosEmQueDecorreu()) {
 
-            for (int i = 0; i < prova.getEventosEmQueDecorreu().size(); i++) {
-                String conteudo = eventosEmQueDecorreu.getText();
+            eventosEmQueDecorreu.append(nome);
 
-                listaEventos.add(conteudo);
-            }
-
-            for (int i = 0; i < listaEventos.size(); i++) {
-                if (listaEventos.get(i).equals(nome)){
-                    isRepeated = true;
-                    break;
-                }
-            }
-
-            if (!isRepeated){
-                eventosEmQueDecorreu.append(nome);
-                eventosEmQueDecorreu.append("\n");
-            }
+            eventosEmQueDecorreu.append("\n");
 
         }
+        System.out.println();
         notas.setText(prova.getNotas());
     }
 
@@ -127,7 +125,7 @@ public class EcraCriarEditarDetalhesProva extends JDialog{
 
     private void btnVoltarActionPerformed(ActionEvent e) {
       setVisible(false);
-
+      eventosEmQueDecorreu.setText("");
       getParent().setVisible(true);
     }
 

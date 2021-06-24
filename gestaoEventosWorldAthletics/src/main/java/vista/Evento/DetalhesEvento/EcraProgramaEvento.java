@@ -1,13 +1,17 @@
 package vista.Evento.DetalhesEvento;
 
+import jdk.nashorn.internal.scripts.JO;
 import modelo.*;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 public class EcraProgramaEvento extends JDialog{
     private JPanel painelProgramaEvento;
@@ -16,13 +20,22 @@ public class EcraProgramaEvento extends JDialog{
     private JButton voltarButton;
     private JPanel painelDias;
     private JPanel painelTabelas;
+    private JButton atualizarCalendarioButton;
+    private JTable tabelaDoDia;
+    private JScrollPane jspane;
     private JTable tableProvasPorDia;
     private String[] arrayButtonsDias;
     private JButton buttons[];
     private Evento evento;
+    private int atualizado;
+
 
     public EcraProgramaEvento(Evento evento){
         this.evento = evento;
+        this.atualizado=0;
+        if(evento.getArraysModelos() == null){
+            evento.criarRondas();
+        }
 
         GridLayout gl =new GridLayout(1,10);
         painelDias.setLayout(gl);
@@ -32,18 +45,16 @@ public class EcraProgramaEvento extends JDialog{
 
         painelTabelas.setSize(new Dimension(200,200));
 
+
         criarBotoesECalendario(evento, painelDias);
 
-        ArrayList<Prova> provas = evento.getListaProvas();
-
-        criarTabelasRondas(provas);
-
         voltarButton.addActionListener(this::btnVoltarActionPerformed);
-
+        atualizarCalendarioButton.addActionListener(this::btnAtualizarCalendarioActionPerfomed);
         tabelaDeMedalhasButton.addActionListener(this::btnTabelaMedalhasActionPeformed);
         vencedoresButton.addActionListener(this::btnVencedoresActionPeformed);
 
         painelProgramaEvento.add(voltarButton, "SOUTH");
+        painelProgramaEvento.add(atualizarCalendarioButton, "SOUTH");
         painelProgramaEvento.add(tabelaDeMedalhasButton, "SOUTH");
         painelProgramaEvento.add(vencedoresButton, "SOUTH");
 
@@ -53,75 +64,53 @@ public class EcraProgramaEvento extends JDialog{
         setVisible(true);
     }
 
-    public void criarTabelasRondas(ArrayList<Prova> provas){
+    public void btnAtualizarCalendarioActionPerfomed(ActionEvent e){
+        this.atualizado=1;
+        evento.criarRondas();
+        int dias = evento.getDataFim().getDia() - evento.getDataInicio().getDia() +1;
 
-        String[][] rows = new String[4][9];
-        //prova = new ProvaDadosPreDefinidos("Prova2", "Corrida", "Pista exterior", "Eliminatórias", Genero.MASCULINO, " ", -1);
-        int numCol=0;
+        ArrayList<DefaultTableModel> arrayModels = new ArrayList<>();
 
-        //criar uma lista de rondas onde cada prova terá um numero de rondas dependentes no numero de inscritos, depois cada ronda tera um id
-        //e a tabela será feita com a lista de rondas.
-        //as provas tem de ter um id para associar as rondas
+        for (int i =0; i < dias; i++){
 
-        for (int i = 0; i < 2; i++) {
-            rows[i][numCol] = "A definir";
-            rows[i][numCol+1] = ""+provas.get(i).getNome()+"";
-            rows[i][numCol+2] = ""+provas.get(i).getTipoProva()+"";
-            rows[i][numCol+3] = "A definir";
-            rows[i][numCol+4] = ""+provas.get(i).getLocal()+"";
-            rows[i][numCol+5] = ""+provas.get(i).getGenero()+"";
-            rows[i][numCol+6] = "LISTA";
-            rows[i][numCol+7] = "VER";
-            rows[i][numCol+8] = "ACOMPANHAR";
-        }
+            Object[] columnNames = { "Hora", "Nome", "TipoProva","Ronda", "Local", "Género", "Inscritos", "Resultados", "Progresso" };
 
-        String[] columnNames = { "Hora", "Nome", "TipoProva","Ronda", "Local", "Género", "Inscritos", "Resultados", "Progresso" };
+            DefaultTableModel model = new DefaultTableModel(null, columnNames);
 
-        tableProvasPorDia = new JTable(rows, columnNames);
-        tableProvasPorDia.setDefaultEditor(Object.class, null);
+            Ronda rondaDia = null;
 
-        JScrollPane sp = new JScrollPane(tableProvasPorDia);
-
-        painelTabelas.add(sp);
-
-        tableProvasPorDia.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2) {
-                    JTable target = (JTable)e.getSource();
-                    int row = target.getSelectedRow();
-                    int column = target.getSelectedColumn();
-
-                    //Inscritos
-                    if(column == 6){
-                        btnConsultarInscritosActionPerformed(evento.getListaProvas().get(row));
-                    }
-                    //Resultados
-                    if(column == 7){
-                        btnResultadosRondaProvaActionPerformed(evento.getListaProvas().get(row));
-                    }
-                    //Progresso
-                    else if(column == 8){
-                        btnAcompanharProvaEventoActionPerformed(evento.getListaProvas().get(row));
-                    }
+            for (Prova prova : evento.getListaProvas()) {
+                rondaDia = prova.getListaDeRondasDaProvaPorDia(i);
+                if (rondaDia != null) {
+                    model.addRow(new Object[]{rondaDia.getHora().getHora() + ":" + rondaDia.getHora().getMinutos(), rondaDia.getProvaDaRonda().getNome(), rondaDia.getProvaDaRonda().getTipoProva(),
+                            rondaDia.getNomeRonda(), rondaDia.getProvaDaRonda().getLocal(), rondaDia.getProvaDaRonda().getGenero(), "LISTA", "VER", "ACOMPANHAR"});
+                }
+                else{
+                    model.addRow(new Object[]{"Nao existe", "Nao existe","Nao existe","Nao existe","Nao existe","Nao existe","LISTA", "VER", "ACOMPANHAR"});
                 }
             }
-        });
+            arrayModels.add(model);
+        }
+
+        evento.setArraysModelos(arrayModels);
     }
 
 
-    private void btnConsultarInscritosActionPerformed(Prova prova) {
 
-        new EcraInscritosEvento(evento, prova);
+
+    private void btnConsultarInscritosActionPerformed(ArrayList<Atleta> atletas, Prova prova, Ronda ronda) {
+
+        new EcraInscritosEvento(evento, atletas, prova, ronda);
     }
 
-    private void btnResultadosRondaProvaActionPerformed(Prova prova){
+    private void btnResultadosRondaProvaActionPerformed(Prova prova, Ronda ronda){
 
-        new EcraResultadosRondaProva(evento, prova);
+        new EcraResultadosRondaProva(evento, prova, ronda);
     }
 
-    private void btnAcompanharProvaEventoActionPerformed(Prova prova){
+    private void btnAcompanharProvaEventoActionPerformed(Prova prova, Ronda ronda){
 
-        new EcraAcompanharProvaEvento(evento, prova);
+        new EcraAcompanharProvaEvento(evento, prova, ronda);
     }
 
     public void btnTabelaMedalhasActionPeformed(ActionEvent e) {
@@ -152,12 +141,18 @@ public class EcraProgramaEvento extends JDialog{
 
         for (int i = 0; i < diff; i++) {
             arrayButtonsDias[i] = Integer.toString(diasParaOArray) ;
-            System.out.println(arrayButtonsDias[i]);
             diasParaOArray++;
         }
 
         for(int i = 0; i < diff; i++) {
             buttons[i] = new JButton(arrayButtonsDias[i]);
+            int finalI = i;
+            buttons[i].addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    criarTabelasRondasActionPerformed(finalI, evento);
+                    //System.out.println(buttons[finalI].getText());
+                }
+            });
         }
 
         GridLayout gl =new GridLayout(10,10);
@@ -168,6 +163,44 @@ public class EcraProgramaEvento extends JDialog{
         }
 
     }
+
+
+    public void criarTabelasRondasActionPerformed( int dia, Evento evento){
+
+        if (this.atualizado ==0) {
+            JOptionPane.showMessageDialog(null, "Antes de aceder ao programa, atualize os dados no botão");
+        } else{
+            tabelaDoDia.setModel( evento.getModel(dia));
+            tabelaDoDia.setDefaultEditor(Object.class, null);
+            tabelaDoDia.addMouseListener(new MouseAdapter() {
+                public void mouseClicked(MouseEvent e) {
+                    if (e.getClickCount() == 2) {
+                        JTable target = (JTable)e.getSource();
+                        int row = target.getSelectedRow();
+                        int column = target.getSelectedColumn();
+
+                        //Inscritos
+                        if(column == 6){
+                            btnConsultarInscritosActionPerformed(evento.getListaProvas().get(row).getListaDeRondasDaProvaPorDia(dia).getListaInscritos(), evento.getListaProvas().get(row)
+                                    , evento.getListaProvas().get(row).getListaDeRondasDaProvaPorDia(dia));
+                        }
+                        //Resultados
+                        if(column == 7){
+                            btnResultadosRondaProvaActionPerformed(evento.getListaProvas().get(row), evento.getListaProvas().get(row).getListaDeRondasDaProvaPorDia(dia));
+                        }
+                        //Progresso
+                        else if(column == 8){
+                            btnAcompanharProvaEventoActionPerformed(evento.getListaProvas().get(row), evento.getListaProvas().get(row).getListaDeRondasDaProvaPorDia(dia));
+                        }
+                    }
+                }
+            });
+        }
+
+
+    }
+
+
 
     public void filtrarGenero(){
         return;
